@@ -31,3 +31,10 @@ Prototype - All pages load null data, all forms are set to throw errors.
 * Logtail logging of upload parsing errors
 * Node up/down alerts
 * Move away from PHP
+
+## GPL v3, Copyright 2013
+
+* Phil Crump
+* Elements from habitat.habhub.org
+    * (C) Copyright 2012 Daniel Richman, Daniel Saul; GNU GPL 3
+* Bootstrap Templates
