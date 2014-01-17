@@ -149,7 +149,7 @@
     $(document).ready(function() {
         $("#callsign").change(function() {
             $.ajax({
-	            url: "api/checkNodeId.php",
+	            url: "api/checkNodeId",
 	            type: "GET",
 	            dataType: 'json',
 	            data: {
@@ -166,7 +166,7 @@
 		    $("#checkIdStatus").html("Checking..");
 	    });
         $.ajax({
-	        url: "api/users.php",
+	        url: "api/users",
 	        type: "GET",
 	        dataType: 'json',
 	        success: function( data ) {
@@ -205,7 +205,7 @@
 		    }
 		    $("#addStatus").html("<b>Adding..</b>");
 		    $.ajax({
-			    url: "api/addNode.php",
+			    url: "api/addNode",
 			    type: "POST",
 			    data: {
 				    id: $("#callsign").val(),
