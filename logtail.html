@@ -17,6 +17,12 @@
         padding: 40px 15px;
         text-align: left;
     }
+    .row {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        min-height: 2em;
+        color: #666;
+    }
     </style>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -81,6 +87,7 @@
     </div><!-- /.container -->
     <script src="static/jquery-1.10.2.min.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/moment.min.js"></script>
     <script>
     var pageStarting=true;
     
@@ -93,9 +100,16 @@
 	        dataType: 'json',
 	        success: function( data ) {
 	            if(typeof(data.length)!= 'undefined' && data.length!=0) {
-	                // Parse data
-	                // Construct HTML
-	                $("#logtail-inner").html(data);
+	                var output="";
+	                var dataLength = data.length;
+                    for (var i=0; i<dataLength; i++) {
+                        output+='<div id="'+data[i].i+'_row" class="row">';
+                        output+='<div class="col-md-3"><b>'+data[i].i+',&nbsp;'+moment(data[i].t*1000).format("YYYY-MM-DD HH:mm:ss")+'</b></div>';
+                        output+='<div class="col-md-6">'+data[i].p+'</div>';
+                        //output+='<div class="col-md-3">'+data[i].o+'</div>';
+                        output+='</div>';
+                    }
+	                $("#logtail-inner").html(output);
                     if(pageStarting) {
                         pageStarting=false;
                     }

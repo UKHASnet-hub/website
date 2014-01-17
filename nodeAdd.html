@@ -13,6 +13,10 @@
     body {
         padding-top: 30px;
     }
+    .node-form {
+        padding: 40px 15px;
+        text-align: left;
+    }
     .fixed-latlon-label {
         opacity: 0.3;
     }
@@ -166,15 +170,15 @@
 		    $("#checkIdStatus").html("Checking..");
 	    });
         $.ajax({
-	        url: "api/users",
+	        url: "api/owners",
 	        type: "GET",
 	        dataType: 'json',
 	        success: function( data ) {
 	            if(typeof(data.length)!= 'undefined' && data.length!=0) {
 	                numUsers = data.length;
 	                for (var i=0; i<numUsers; i++) {
-	                    var o = new Option(data[i][1], data[i][0]);
-                        $(o).html(data[i][1]);
+	                    var o = new Option(data[i][1], data[i].i);
+                        $(o).html(data[i].n);
                         $("#owner").append(o);
                     }
 	                $("#loadUsersStatus").html("");

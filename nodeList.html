@@ -12,10 +12,20 @@
     <style>
     body {
         padding-top: 30px;
+        -webkit-font-smoothing: antialiased;
     }
     .node-list {
         padding: 40px 15px;
         text-align: left;
+    }
+    .browse_item.row {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        min-height: 2em;
+        color: #666;
+    }
+    .browse_item:hover {
+        background-color: #B8E6F3;
     }
     </style>
     <!--[if lt IE 9]>
@@ -93,12 +103,23 @@
 	        dataType: 'json',
 	        success: function( data ) {
 	            if(typeof(data.length)!= 'undefined' && data.length!=0) {
-	                // Parse data
-	                // Construct HTML
-	                $("#nodelist-inner").html(data);
+	                var output="";
+	                var dataLength = data.length;
+                    for (var i=0; i<dataLength; i++) {
+                        output+='<div id="'+data[i].i+'_row" class="browse_item row">';
+                        output+='<div class="col-md-3"><b>'+data[i].n+'</b></div>';
+                        output+='<div class="col-md-6">'+data[i].d+'</div>';
+                        output+='<div class="col-md-3">'+data[i].o+'</div>';
+                        output+='</div>';
+                    }
+	                $("#nodelist-inner").html(output);
                     if(pageStarting) {
                         pageStarting=false;
                     }
+                    $(".row").click(function(event){
+                        var wantedId = event.currentTarget.id.substring(0,event.currentTarget.id.length-4);
+                        window.location.href = "nodeInfo?id="+wantedId;
+                    });
 		        } else {
 		            if(pageStarting) {
 		                $("#nodelist-inner").html("<p><b>Nothing Found!</b></p>");
