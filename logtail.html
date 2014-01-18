@@ -115,7 +115,7 @@
                     output+='<div id="'+data[i].i+'_row" class="row">';
                     output+='<div class="col-md-3"><b>['+data[i].i+',&nbsp;'+moment(data[i].t*1000).format("YYYY-MM-DD HH:mm:ss")+']</b></div>';
                     output+='<div class="col-md-4">'+data[i].p+'</div>';
-                    output+='<div class="col-md-2">'+data[i].ni+'</div>';
+                    output+='<div class="col-md-2"><a href="nodeInfo?id='+data[i].ni+'">'+data[i].nn+'</a></div>';
                     output+='<div class="col-md-3">'+data[i].s+'</div>';
                     output+='</div>';
                 }
@@ -147,7 +147,7 @@
                         output+='<div id="'+data[i].i+'_row" class="row">';
                         output+='<div class="col-md-3"><b>'+data[i].i+',&nbsp;'+moment(data[i].t*1000).format("YYYY-MM-DD HH:mm:ss")+'</b></div>';
                         output+='<div class="col-md-4">'+data[i].p+'</div>';
-                        output+='<div class="col-md-2">'+data[i].ni+'</div>';
+                        output+='<div class="col-md-2"><a href="nodeInfo?id='+data[i].ni+'">'+data[i].nn+'</a></div>';
                         output+='<div class="col-md-3">'+data[i].s+'</div>';
                         output+='</div>';
                     }
