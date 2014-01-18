@@ -23,6 +23,10 @@
         min-height: 2em;
         color: #666;
     }
+    .row.title {
+        color: #999;
+        padding-top: 0px;
+    }
     </style>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -80,6 +84,12 @@
       <div class="logtail">
         <h1>Message Logtail</h1>
         <p class="lead">This page will automatically update with new messages from the network.</p>
+        <div class="row title">
+            <div class="col-md-3">Upload id, Timestamp</div>
+            <div class="col-md-4">Raw Packet</div>
+            <div class="col-md-2">Gateway</div>
+            <div class="col-md-3">Parse Status</div>
+        </div>
         <div id="logtail-inner">
         </div>
       </div>
@@ -90,40 +100,67 @@
     <script src="static/moment.min.js"></script>
     <script>
     var pageStarting=true;
+    var lastId=0;
+    var refreshLogInterval=3; // seconds
     
-    refreshLog();
+    $.ajax({
+        url: "api/logtail",
+        type: "GET",
+        dataType: 'json',
+        success: function( data ) {
+            if(data!="null" && typeof(data.length)!= 'undefined' && data.length!=0) {
+                var output="";
+                var dataLength = data.length;
+                for (var i=0; i<dataLength; i++) {
+                    output+='<div id="'+data[i].i+'_row" class="row">';
+                    output+='<div class="col-md-3"><b>['+data[i].i+',&nbsp;'+moment(data[i].t*1000).format("YYYY-MM-DD HH:mm:ss")+']</b></div>';
+                    output+='<div class="col-md-4">'+data[i].p+'</div>';
+                    output+='<div class="col-md-2">'+data[i].ni+'</div>';
+                    output+='<div class="col-md-3">'+data[i].s+'</div>';
+                    output+='</div>';
+                }
+                $("#logtail-inner").html(output);
+                pageStarting=false;
+                lastId = data[0].i; // Data is sorted descending
+	        } else {
+                $("#logtail-inner").html("<p><b>Nothing Found!</b></p>");
+	        }
+            setInterval(refreshLog,refreshLogInterval*1000);
+        }
+    });
+    
+    $("#logtail-inner").html("<p>Loading..</p>");
     
     function refreshLog() {
         $.ajax({
 	        url: "api/logtail",
 	        type: "GET",
 	        dataType: 'json',
+	        data: {
+	            lastId: lastId
+	        },
 	        success: function( data ) {
-	            if(typeof(data.length)!= 'undefined' && data.length!=0) {
+	            if(data!="null" && typeof(data.length)!= 'undefined' && data.length!=0) {
 	                var output="";
 	                var dataLength = data.length;
                     for (var i=0; i<dataLength; i++) {
                         output+='<div id="'+data[i].i+'_row" class="row">';
                         output+='<div class="col-md-3"><b>'+data[i].i+',&nbsp;'+moment(data[i].t*1000).format("YYYY-MM-DD HH:mm:ss")+'</b></div>';
-                        output+='<div class="col-md-6">'+data[i].p+'</div>';
-                        //output+='<div class="col-md-3">'+data[i].o+'</div>';
+                        output+='<div class="col-md-4">'+data[i].p+'</div>';
+                        output+='<div class="col-md-2">'+data[i].ni+'</div>';
+                        output+='<div class="col-md-3">'+data[i].s+'</div>';
                         output+='</div>';
                     }
-	                $("#logtail-inner").html(output);
                     if(pageStarting) {
+                        $("#logtail-inner").html(output);
                         pageStarting=false;
-                    }
-		        } else {
-		            if(pageStarting) {
-		                $("#logtail-inner").html("<p><b>Nothing Found!</b></p>");
-                        pageStarting=false;
-		            }
+                    } else {
+	                    $("#logtail-inner").html(output+$("#logtail-inner").html());
+	                }
+                    lastId = data[0].i; // Data is sorted descending
 		        }
 	        }
         });
-        if(pageStarting) {
-            $("#logtail-inner").html("<p>Loading..</p>");
-        }
     }
     </script>
   </body>
