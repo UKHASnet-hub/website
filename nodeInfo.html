@@ -14,7 +14,12 @@
         padding-top: 30px;
     }
     .node-info {
-        padding: 40px 15px;
+        padding-left: 15px;
+        padding-top: 40px;
+        text-align: left;
+    }
+    .node-data {
+        padding-left: 15px;
         text-align: left;
     }
     </style>
@@ -73,14 +78,20 @@
 
       <div id="nodeinfo" class="node-info">
       </div>
+      <div id="nodedata" class="node-data">
+      </div>
+      <br><br>
+      graphs n'stuff!
 
     </div><!-- /.container -->
     <script src="static/jquery-1.10.2.min.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/moment.min.js"></script>
     <script>
     var pageStarting=true;
 
     getNodeInfo();
+    getNodeLData();
     
     function getNodeInfo() {
         $.ajax({
@@ -111,6 +122,29 @@
             $("#nodeinfo").html("<p>Loading..</p>");
         }
     }
+    
+    function getNodeLData() {
+        $.ajax({
+	        url: "api/nodeLData",
+	        type: "GET",
+	        data: {
+	            id: urlParam('id')
+	        },
+	        dataType: 'json',
+	        success: function( data ) {
+                var output="";
+                output+='<h3>Last Active:&nbsp;'+moment(data.lRxT*1000).fromNow()+'</h3>';
+                output+='<b>Last Packet:</b>&nbsp;'+data.lPacket+'<br>';
+                output+='<b>Received At:</b>&nbsp;'+moment(data.lRxT*1000).format("YYYY-MM-DD HH:mm:ss")+'<br>';
+                output+='<b>Through:</b>&nbsp;<a href="nodeInfo?id='+data.lRxNi+'">'+data.lRxNn+'</a><br><br>';
+                if(data.lBoot!=0) { // Passed as 0 if server couldn't find a bootup packet
+                    output+='<b>Last Booted At:</b>&nbsp;'+moment(data.lBoot*1000).format("YYYY-MM-DD HH:mm:ss")+'&nbsp;('+moment(data.lBoot*1000).fromNow()+')<br>';
+                }
+                $("#nodedata").html(output);
+	        }
+        });
+    }
+    
     function urlParam(sParam) {
         var sPageURL = window.location.search.substring(1);
         var sURLVariables = sPageURL.split('&');
