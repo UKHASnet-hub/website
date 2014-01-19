@@ -143,6 +143,9 @@
     
     $(document).ready(function() {
         $("#callsign").change(function() {
+            if($("#callsign").val()=="") {
+		        return;
+		    }
             $.ajax({
 	            url: "api/checkNodeId",
 	            type: "GET",
