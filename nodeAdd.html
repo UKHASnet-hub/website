@@ -76,8 +76,8 @@
 
       <div class="node-form">
         <h1>Add Node</h1>
-        <p class="lead">To add a Node, choose an ID, select the owner and write a short description.
-        <br>Optionally set a location if the node does not report it's location, to enable the node on the Network Map.</p>
+        <p class="lead">To add a Node, simply choose an ID and type an owner name.
+        <br><strike>Optionally set a location if the node does not report it's location, to enable the node on the Network Map.</strike></p>
         <form class="form-horizontal" id="nodeAdd-form">
             <div class="form-group">
                 <label for="callsign" class="col-xs-2 control-label">Node ID</label>
@@ -86,22 +86,12 @@
                 &nbsp;<span id="checkIdStatus"></span>
                 </div>
             </div>
-
+            
             <div class="form-group">
-              <label class="col-xs-2 control-label" for="owner">Owner</label>
-              <div class="col-xs-3">
-                <select class="form-control" id="owner">
-                </select>
-                &nbsp;<span id="loadUsersStatus"></span>
-              </div>
-            </div>
-
-            <!-- Textarea -->
-            <div class="form-group">
-              <label class="col-xs-2 control-label" for="desc">Description</label>
-              <div class="col-xs-4">                     
-                <textarea id="desc" class="form-control" name="desc"></textarea>
-              </div>
+                <label for="owner" class="col-xs-2 control-label">Owner</label>
+                <div class="col-xs-3">
+                  <input type="text" class="form-control" id="owner" placeholder="">
+                </div>
             </div>
 
             <!-- Multiple Checkboxes (inline) -->
@@ -110,6 +100,7 @@
               <div class="col-xs-3">
                 <label class="checkbox inline" for="checkboxes-0">
                   <input type="checkbox" name="checkboxes" id="checkboxes-0" value="Fixed Location">
+                  &nbsp; Currently not supported
                 </label>
               </div>
             </div>
@@ -169,33 +160,6 @@
             });
 		    $("#checkIdStatus").html("Checking..");
 	    });
-        $.ajax({
-	        url: "api/owners",
-	        type: "GET",
-	        dataType: 'json',
-	        success: function( data ) {
-	            if(typeof(data.length)!= 'undefined' && data.length!=0) {
-	                numUsers = data.length;
-	                for (var i=0; i<numUsers; i++) {
-	                    var o = new Option(data[i][1], data[i].i);
-                        $(o).html(data[i].n);
-                        $("#owner").append(o);
-                    }
-	                $("#loadUsersStatus").html("");
-                    if(pageStarting) {
-                        pageStarting=false;
-                    }
-		        } else {
-		            if(pageStarting) {
-		                $("#loadUsersStatus").html("<b>No Users Found!</b>");
-                        pageStarting=false;
-		            }
-		        }
-	        }
-        });
-        if(pageStarting) {
-            $("#loadUsersStatus").html("Loading User List..");
-        }
 	    // Add Node Form 'Submit' Action
 	    $("#nodeAdd-form").submit(function( event ) {
 		    event.preventDefault();
