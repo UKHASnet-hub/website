@@ -80,18 +80,20 @@
       </div>
       <div id="nodedata" class="node-data">
       </div>
-      <br><br>
-      graphs n'stuff!
+      <div id="nodegraphs" class="node-graphs">
+      </div>
 
     </div><!-- /.container -->
     <script src="static/jquery-1.10.2.min.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <script src="static/moment.min.js"></script>
+    <script src="static/dygraph-combined.js"></script>
     <script>
     var pageStarting=true;
 
     getNodeInfo();
     getNodeLData();
+    getNodeData();
     
     function getNodeInfo() {
         $.ajax({
@@ -141,6 +143,39 @@
                     output+='<b>Last Booted At:</b>&nbsp;'+moment(data.lBoot*1000).format("YYYY-MM-DD HH:mm:ss")+'&nbsp;('+moment(data.lBoot*1000).fromNow()+')<br>';
                 }
                 $("#nodedata").html(output);
+	        }
+        });
+    }
+    
+    function getNodeData() {
+        $.ajax({
+	        url: "api/nodeData",
+	        type: "GET",
+	        data: {
+	            id: urlParam('id')
+	        },
+	        dataType: 'json',
+	        success: function( data ) {
+                currentGraphData = [];
+                for (var j=0; j<data.length; j++) { // For each Telem Field
+                var newDiv = $('<div>Loading Graph</div>');
+                $('#nodegraphs').append(newDiv);    
+                newDiv.attr('id', 'nodegraph-'+data[j].t);
+                    for (var i=0; i<data[j].d.length; i++) { // For each packet
+                        currentGraphData[i] = [];
+                        currentGraphData[i][0] = moment.unix(data[j].d[i].t).toDate(); // TODO: Write a custom, faster parser?
+                        currentGraphData[i][1] = data[j].d[i].d;
+                    }
+                    currentGraphObj = new Dygraph(
+                        document.getElementById('nodegraph-'+data[j].t),
+                        currentGraphData, {
+                            title: data[j].tn,
+                            //fillGraph: true,
+                            ylabel: data[j].t,
+                            labels: ['Time', data[j].tn]
+                        }
+                    );
+                }
 	        }
         });
     }
