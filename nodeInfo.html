@@ -84,6 +84,33 @@
       </div>
       <div id="nodedata" class="node-data">
       </div>
+      <div id="graphconfig" class="graph-config">
+        <form class="form-horizontal">
+        <fieldset>
+
+        <legend>Graph Options</legend>
+
+        <div class="control-group">
+          <label class="control-label" for="period-radios">Graph Options</label>&nbsp;<span id="graphload-status"></span>
+          <div class="controls">
+            <label class="radio" for="period-radios-0">
+              <input type="radio" name="period-radios" id="period-radios-0" value="48">
+              48 hours
+            </label>
+            <label class="radio" for="period-radios-1">
+              <input type="radio" name="period-radios" id="period-radios-1" value="24" checked="checked">
+              24 hours
+            </label>
+            <label class="radio" for="period-radios-2">
+              <input type="radio" name="period-radios" id="period-radios-2" value="6">
+              6 hours
+            </label>
+          </div>
+        </div>
+
+        </fieldset>
+        </form>
+        </div>
     </div>
     <div id="nodegraphs" class="col-md-7 node-graphs">
     </div>
@@ -94,10 +121,17 @@
     <script src="static/dygraph-combined.js"></script>
     <script>
     var pageStarting=true;
+    var graphObjs = [];
+    var dataInterval = 86400; // 24 hours
 
     getNodeInfo();
     getNodeLData();
     getNodeData();
+    
+    setInterval(function() {
+        getNodeLData();
+        updateNodeData();
+    },60*1000); // Refresh Data every 60s
     
     function getNodeInfo() {
         $.ajax({
@@ -156,21 +190,22 @@
 	        url: "api/nodeData",
 	        type: "GET",
 	        data: {
-	            id: urlParam('id')
+	            id: urlParam('id'),
+	            period: dataInterval
 	        },
 	        dataType: 'json',
 	        success: function( data ) {
                 currentGraphData = [];
                 for (var j=0; j<data.length; j++) { // For each Telem Field
-                var newDiv = $('<div>Loading Graph</div>');
-                $('#nodegraphs').append(newDiv);    
-                newDiv.attr('id', 'nodegraph-'+data[j].t+data[j].i);
+                    var newDiv = $('<div></div>');
+                    $('#nodegraphs').append(newDiv);    
+                    newDiv.attr('id', 'nodegraph-'+data[j].t+data[j].i);
                     for (var i=0; i<data[j].d.length; i++) { // For each packet
                         currentGraphData[i] = [];
                         currentGraphData[i][0] = moment.unix(data[j].d[i].t).toDate(); // TODO: Write a custom, faster parser?
                         currentGraphData[i][1] = data[j].d[i].d;
                     }
-                    currentGraphObj = new Dygraph(
+                    graphObjs[j] = new Dygraph(
                         document.getElementById('nodegraph-'+data[j].t+data[j].i),
                         currentGraphData, {
                             title: data[j].tn,
@@ -180,8 +215,44 @@
                         }
                     );
                 }
+                $("#graphload-status").html("");
 	        }
         });
+        $("#graphload-status").html(" - Loading..");
+    }
+    
+    function updateNodeData() {
+        $.ajax({
+	        url: "api/nodeData",
+	        type: "GET",
+	        data: {
+	            id: urlParam('id'),
+	            period: dataInterval
+	        },
+	        dataType: 'json',
+	        success: function( data ) {
+                currentGraphData = [];
+                for (var j=0; j<data.length; j++) { // For each Telem Field
+                    for (var i=0; i<data[j].d.length; i++) { // For each packet
+                        currentGraphData[i] = [];
+                        currentGraphData[i][0] = moment.unix(data[j].d[i].t).toDate(); // TODO: Write a custom, faster parser?
+                        currentGraphData[i][1] = data[j].d[i].d;
+                    }
+                    if(graphObjs[j]) { graphObjs[j].destroy(); }
+                    graphObjs[j] = new Dygraph(
+                        document.getElementById('nodegraph-'+data[j].t+data[j].i),
+                        currentGraphData, {
+                            title: data[j].tn,
+                            //fillGraph: true,
+                            ylabel: data[j].t,
+                            labels: ['Time', data[j].tn]
+                        }
+                    );
+                }
+                $("#graphload-status").html("");
+	        }
+        });
+        $("#graphload-status").html(" - Refreshing..");
     }
     
     function urlParam(sParam) {
@@ -194,6 +265,14 @@
             }
         }
     }
+    
+    $("input[name='period-radios']").change(function(event) {
+        var selected = $("input[name='period-radios']:checked");
+        if (selected.length > 0) {
+            dataInterval = 60*60*selected.val();
+            updateNodeData();
+        }
+    })
     </script>
   </body>
 </html>
