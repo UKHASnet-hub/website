@@ -26,6 +26,9 @@
         padding-top: 50px;
         padding-bottom: 20px;
     }
+    .nodegraph {
+        width: 100% !important;
+    }
     </style>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -200,6 +203,7 @@
                     var newDiv = $('<div></div>');
                     $('#nodegraphs').append(newDiv);    
                     newDiv.attr('id', 'nodegraph-'+data[j].t+data[j].i);
+                    newDiv.attr('class', 'nodegraph');
                     for (var i=0; i<data[j].d.length; i++) { // For each packet
                         currentGraphData[i] = [];
                         currentGraphData[i][0] = moment.unix(data[j].d[i].t).toDate(); // TODO: Write a custom, faster parser?
