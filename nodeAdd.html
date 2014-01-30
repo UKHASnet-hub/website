@@ -76,8 +76,7 @@
 
       <div class="node-form">
         <h1>Add Node</h1>
-        <p class="lead">To add a Node, simply choose an ID and type an owner name.
-        <br><strike>Optionally set a location if the node does not report it's location, to enable the node on the Network Map.</strike></p>
+        <p class="lead">To add a Node, simply choose an ID. Optionally add owner name or description.</p>
         <form class="form-horizontal" id="nodeAdd-form">
             <div class="form-group">
                 <label for="callsign" class="col-xs-2 control-label">Node ID</label>
@@ -88,39 +87,10 @@
             </div>
             
             <div class="form-group">
-                <label for="owner" class="col-xs-2 control-label">Owner</label>
+                <label for="owner" class="col-xs-2 control-label">Owner/Description</label>
                 <div class="col-xs-3">
                   <input type="text" class="form-control" id="owner" placeholder="">
                 </div>
-            </div>
-
-            <!-- Multiple Checkboxes (inline) -->
-            <div class="form-group">
-              <label class="col-xs-2 control-label" for="checkboxes">Fixed Location</label>
-              <div class="col-xs-3">
-                <label class="checkbox inline" for="checkboxes-0">
-                  <input type="checkbox" name="checkboxes" id="checkboxes-0" value="Fixed Location">
-                  &nbsp; Currently not supported
-                </label>
-              </div>
-            </div>
-
-            <!-- Text input-->
-            <div class="form-group">
-              <label class="col-xs-2 control-label fixed-latlon-label" for="lat">Latitude</label>
-              <div class="col-xs-2">
-                <input id="lat" class="form-control fixed-latlon" name="lat" type="text" placeholder="eg. 50.1935" class="input-small" disabled>
-                
-              </div>
-            </div>
-
-            <!-- Text input-->
-            <div class="form-group">
-              <label class="col-xs-2 control-label fixed-latlon-label" for="lat">Longitude</label>
-              <div class="col-xs-2">
-                <input id="lat" class="form-control fixed-latlon" name="lat" type="text" placeholder="eg. -1.3950" class="input-small" disabled>
-                
-              </div>
             </div>
 
             <!-- Button -->
@@ -170,10 +140,6 @@
 		        $("#addStatus").html("<b>Choose a node id above</b>");
 		        return;
 		    }
-		    if($("#checkboxes-0").is(':checked') && ($("#lat").val()=="" || $("#lon").val()=="")) {
-		        $("#addStatus").html("<b>Enter Location above</b>");
-		        return;
-		    }
 		    $("#addStatus").html("<b>Adding..</b>");
 		    $.ajax({
 			    url: "api/addNode",
@@ -191,15 +157,6 @@
 			        }
 			    }
 		    });
-	    });
-	    $("#checkboxes-0").click(function( event ) {
-	        if($("#checkboxes-0").is(':checked')) {
-	            $(".fixed-latlon").attr("disabled",false);
-	            $(".fixed-latlon-label").css( "opacity", 1 );
-	        } else {
-	            $(".fixed-latlon").attr("disabled",true);
-	            $(".fixed-latlon-label").css( "opacity", 0.3 );
-	        }
 	    });
 	});
     </script>
