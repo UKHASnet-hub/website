@@ -125,7 +125,8 @@
 	                    }
 	                    var popupHtml = '<b style="font-size:12px">'+data[i].n+"</b> (<a href='/nodeInfo?id="+data[i].i+"' target='_blank'>node info</a>)<br>"
                             +"<b>Owner:</b> "+data[i].o+"<br>"
-                            +"<b>Last Packet:</b> "+data[i].p+" <i>"+moment(data[i].a*1000).fromNow()+"</i>";
+                            +"<b>Last Packet:</b> "+data[i].p+"<br>"
+                            +"<b>Last Active:</b> <i>"+moment(data[i].a*1000).fromNow()+"</i>";
 	                    if(!nodeMarkers[data[i].n]) {
 	                        nodeMarkers[data[i].n] = L.marker([data[i].la,data[i].lo], {
                                 title: data[i].nn,
