@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="UKHASnet - A simple and license-free mesh network.">
     <meta name="author" content="UK High Altitude Society">
-    <title>UKHASnet</title>
+    <title>Edit Node - UKHASnet</title>
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/bootstrap/css/ukhasnet.css" rel="stylesheet">
     <style>
@@ -48,8 +48,8 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Node Tools<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li class="active"><a href="#">Add Node</a></li>
-                <li><a href="nodeEdit">Edit Node</a></li>
+                <li><a href="nodeAdd">Add Node</a></li>
+                <li class="active"><a href="#">Edit Node</a></li>
               </ul>
             </li>
           </ul>
@@ -65,15 +65,16 @@
     <div class="container">
 
       <div class="node-form">
-        <h1>Add Node</h1>
-        <p class="lead">To add a Node, simply choose an ID. Optionally add owner name or description.</p>
-        <form class="form-horizontal" id="nodeAdd-form">
+        <h1>Edit Node</h1>
+        <p class="lead">Not yet implemented</p>
+        <form class="form-horizontal" id="nodeEdit-form">
             <div class="form-group">
-                <label for="callsign" class="col-xs-2 control-label">Node ID</label>
-                <div class="col-xs-2">
-                  <input type="text" class="form-control" id="callsign" placeholder="">
-                &nbsp;<span id="checkIdStatus"></span>
-                </div>
+              <label class="col-xs-2 control-label" for="node-select">Select Node</label>
+              <div class="col-xs-3">
+                <select name="node-select" id="node-select" class="form-control input-large">
+                    <option value="select">-- Select a Node</option>
+                </select>
+              </div>
             </div>
             
             <div class="form-group">
@@ -87,8 +88,8 @@
             <div class="form-group">
               <label class="col-xs-2 control-label" for="submit_btn"></label>
               <div class="col-xs-3">
-                <button id="submit_btn" name="submit_btn" class="btn btn-primary">Add Node</button>
-                &nbsp;<span id="addStatus"></span>
+                <button id="submit_btn" name="submit_btn" class="btn btn-primary">Submit Edit</button>
+                &nbsp;<span id="editStatus"></span>
               </div>
             </div>
             </form>
@@ -100,54 +101,53 @@
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <script>
     var pageStarting=true;
+    var nodeData=[];
     
     $(document).ready(function() {
-        $("#callsign").change(function() {
-            if($("#callsign").val()=="") {
-		        return;
-		    }
-            $.ajax({
-	            url: "api/checkNodeId",
-	            type: "GET",
-	            dataType: 'json',
-	            data: {
-	                id: $("#callsign").val()
-	            },
-	            success: function( data ) {
-                    if(data.ok==1) {
-                        $("#checkIdStatus").html("<b style='color:green;'>Available!</b>");
-                    } else {
-                        $("#checkIdStatus").html("<b style='color:red;'>Already taken, please choose another.</b>");
-                    }
-	            }
-            });
-		    $("#checkIdStatus").html("Checking..");
+        $("#node-select").change(function() {
+            if($("#node-select").val()!="select") {
+                $("#owner").val(nodeData[$("#node-select").val()].o);
+            }
 	    });
 	    // Add Node Form 'Submit' Action
-	    $("#nodeAdd-form").submit(function( event ) {
+	    $("#nodeEdit-form").submit(function( event ) {
 		    event.preventDefault();
-		    if($("#callsign").val()=="") {
-		        $("#addStatus").html("<b>Choose a node id above</b>");
-		        return;
+		    if($("#node-select").val()=="select") {
+		        $("#editStatus").html("<b style='color:red;'>Please select a node from the dropdown</b>");
+		        return
 		    }
-		    $("#addStatus").html("<b>Adding..</b>");
+		    $("#editStatus").html("<b>Submitting</b>");
 		    $.ajax({
-			    url: "api/addNode",
+			    url: "api/editNode",
 			    type: "POST",
 			    data: {
-				    id: $("#callsign").val(),
+				    id: $("#node-select").val(),
 				    owner: $("#owner").val()
 			    },
 			    dataType: 'json',
 			    success: function( data ) {
 			        if(data.error==0) {
-			        	$("#addStatus").html("<b style='color:green;'>Node Added.</b>");
+			        	$("#editStatus").html("<b style='color:green;'>Edit Successful.</b>");
 			       	} else if(data.error==1) {
-			       		$("#addStatus").html("<b style='color:red;'>Error, please consult developer.</b>");
+			       		$("#editStatus").html("<b style='color:red;'>Error, please consult developer.</b>");
 			        }
 			    }
 		    });
 	    });
+	    $.ajax({
+            url: "api/nodeInfo",
+            type: "GET",
+            dataType: 'json',
+            success: function( data ) {
+	            if(data.length!=0) {
+	                var dataLength = data.length;
+	                for (var i=0; i<dataLength; i++) {
+	                    $("#node-select").append("<option value='"+data[i].i+"'>"+data[i].n+"</option>");
+	                    nodeData[data[i].i] = data[i];
+	                }
+	            }
+            }
+        });
 	});
     </script>
   </body>
