@@ -16,10 +16,6 @@ Deployed to [ukhas.net](http://www.ukhas.net)
 
 * All dynamic data is loaded from a HTTP Reverse-proxied golang application (ukhasnet-api)
 
-## ToDo
-
-* Merge mfa298's packet parsing code into packet upload
-
 ## Wishlist
 
 * User authentication - hopefully not a problem until becomes widespread
