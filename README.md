@@ -1,11 +1,11 @@
 UKHASnet-www
 ============
 
-This is a website for the UKHASnet Network
+This is the [ukhas.net](http://www.ukhas.net) website for the UKHASnet Network
 
 ## Status
 
-Prototype - All pages load example data
+Deployed to [ukhas.net](http://www.ukhas.net)
 
 ## Structure
 
@@ -14,14 +14,11 @@ Prototype - All pages load example data
 
 ### API
 
-* HTTP Reverse-proxied golang application
+* All dynamic data is loaded from a HTTP Reverse-proxied golang application (ukhasnet-api)
 
 ## ToDo
 
-* Add parsing for packet upload
-* Add DB to server
-* Write the rest of the API to interface with db
-* Edit Node/Edit User pages
+* Merge mfa298's packet parsing code into packet upload
 
 ## Wishlist
 
