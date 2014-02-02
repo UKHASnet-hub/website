@@ -140,6 +140,7 @@
 	                output+='<h1>'+data[0].n+'</h1>';
 	                output+='<p class="lead">'+data[0].o+'</p>';
 	                $("#nodeinfo").html(output);
+	                document.title = data[0].n+" - UKHASnet";
                     if(pageStarting) {
                         pageStarting=false;
                     }
