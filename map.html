@@ -109,6 +109,9 @@
 	                var utcTime = moment.utc().unix();
 	                var dataLength = data.length;
 	                for (var i=0; i<dataLength; i++) {
+	                    if(data[i].a<utcTime-24*3600) {
+	                        continue;
+	                    }
 	                    if(data[i].a>utcTime-3600) {
 	                        var nodeIcon = activeIcon;
 	                    } else {
