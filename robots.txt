@@ -1,3 +1,4 @@
 Sitemap: http://www.ukhas.net/sitemap.xml
+Sitemap: http://www.ukhas.net/wiki/doku.php?do=sitemap
 User-agent: *
 Disallow: 
