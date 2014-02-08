@@ -5,8 +5,12 @@
       <priority>1.0</priority>
    </url>
    <url>
+      <loc>http://www.ukhas.net/wiki/</loc>
+      <priority>0.9</priority>
+   </url>
+   <url>
       <loc>http://www.ukhas.net/map</loc>
-      <priority>0.6</priority>
+      <priority>0.8</priority>
    </url>
    <url>
       <loc>http://www.ukhas.net/nodeList</loc>
