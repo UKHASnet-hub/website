@@ -20,6 +20,7 @@
     }
     .node-data {
         padding-left: 15px;
+        padding-bottom: 15px;
         text-align: left;
     }
     .node-graphs {
@@ -28,6 +29,11 @@
     }
     .nodegraph {
         width: 100% !important;
+    }
+    .row {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        min-height: 2em;
     }
     </style>
     <!--[if lt IE 9]>
@@ -167,11 +173,20 @@
 	        success: function( data ) {
                 var output="";
                 output+='<h3>Last Active:&nbsp;'+moment(data.lRxT*1000).fromNow()+'</h3>';
-                output+='<b>Last Packet:</b>&nbsp;'+data.lPacket+'<br>';
-                output+='<b>Received At:</b>&nbsp;'+moment(data.lRxT*1000).format("YYYY-MM-DD HH:mm:ss")+'<br>';
-                output+='<b>Through:</b>&nbsp;<a href="nodeInfo?id='+data.lRxNi+'">'+data.lRxNn+'</a><br><br>';
+                output+='<b>Last Packet:</b>&nbsp;'+data.lPackets[0].p+'<br>';
+                output+='<b>Received At:</b>&nbsp;'+moment(data.lRxT*1000).format("YYYY-MM-DD HH:mm:ss")+'<br><br>';
+                output+='<b>Last 5 Packets:</b>';
+                //output+='<table><tbody>';
+                for (var j=0; j<data.lPackets.length; j++) {
+                    //output+='<tr><td>'+moment(data.lPackets[j].t*1000).format("YYYY-MM-DD HH:mm:ss")+'</td><td>'+data.lPackets[j].p+'</td></tr>';
+                    output+='<div class="row">';
+                    output+='<div class="col-md-6">'+moment(data.lPackets[j].t*1000).format("YYYY-MM-DD HH:mm:ss")+'</div>';
+                    output+='<div class="col-md-6">'+data.lPackets[j].p+'</div>';
+                    output+='</div>';
+                }
+                //output+='</tbody></table>';
                 if(data.lBoot!=0) { // Passed as 0 if server couldn't find a bootup packet
-                    output+='<b>Last Booted At:</b>&nbsp;'+moment(data.lBoot*1000).format("YYYY-MM-DD HH:mm:ss")+'&nbsp;('+moment(data.lBoot*1000).fromNow()+')<br>';
+                    output+='<br><b>Last Booted At:</b>&nbsp;'+moment(data.lBoot*1000).format("YYYY-MM-DD HH:mm:ss")+'&nbsp;('+moment(data.lBoot*1000).fromNow()+')<br>';
                 }
                 $("#nodedata").html(output);
 	        }
