@@ -91,7 +91,7 @@
     <script src="static/moment.min.js"></script>
     <script src="static/socket.io.min.js"></script>
     <script>    
-    var socket = io.connect("/socket/logtail");
+    var socket = io.connect("/logtail");
     
     socket.on("logtail_l200", function(message, urgency){
         data=JSON.parse(message);
@@ -107,7 +107,6 @@
                 output+='</div>';
             }
             $("#logtail-inner").html(output);
-            lastId = data[0].i; // Data is sorted descending
         } else {
             $("#logtail-inner").html("<p><b>Nothing Found!</b></p>");
         }
