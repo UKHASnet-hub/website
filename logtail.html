@@ -124,7 +124,7 @@
         $("#logtail-inner").html(output+$("#logtail-inner").html());
     });
     
-    socket.on("parse_row", function(message, urgency){
+    socket.on("upload_parse", function(message, urgency){
         data=JSON.parse(message);
         $("#'+data.i+'_state").html(data.s);
     });
