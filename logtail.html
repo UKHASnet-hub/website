@@ -126,7 +126,7 @@
     
     socket.on("upload_parse", function(message, urgency){
         data=JSON.parse(message);
-        $("#'+data.i+'_state").html(data.s);
+        $('#'+data.i+'_state').html(data.s);
     });
     
     $("#logtail-inner").html("<p>Loading..</p>");
