@@ -203,8 +203,8 @@
 	        },
 	        dataType: 'json',
 	        success: function( data ) {
-                currentGraphData = [];
                 for (var j=0; j<data.length; j++) { // For each Telem Field
+                    currentGraphData = [];
                     var newDiv = $('<div></div>');
                     $('#nodegraphs').append(newDiv);    
                     newDiv.attr('id', 'nodegraph-'+data[j].t+data[j].i);
@@ -241,8 +241,8 @@
 	        },
 	        dataType: 'json',
 	        success: function( data ) {
-                currentGraphData = [];
                 for (var j=0; j<data.length; j++) { // For each Telem Field
+                    currentGraphData = [];
                     for (var i=0; i<data[j].d.length; i++) { // For each packet
                         currentGraphData[i] = [];
                         currentGraphData[i][0] = moment.unix(data[j].d[i].t).toDate(); // TODO: Write a custom, faster parser?
