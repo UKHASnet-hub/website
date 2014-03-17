@@ -119,7 +119,7 @@
 		    }
 		    $("#editStatus").html("<b>Submitting</b>");
 		    $.ajax({
-			    url: "nuapi/editNode",
+			    url: "api/editNode",
 			    type: "POST",
 			    data: {
 				    id: $("#node-select").val().trim(),
@@ -136,7 +136,7 @@
 		    });
 	    });
 	    $.ajax({
-            url: "nuapi/nodeInfo",
+            url: "api/nodeInfo",
             type: "GET",
             dataType: 'json',
             success: function( data ) {

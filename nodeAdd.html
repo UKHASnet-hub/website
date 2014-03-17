@@ -108,7 +108,7 @@
 		        return;
 		    }
             $.ajax({
-	            url: "nuapi/checkNodeId",
+	            url: "api/checkNodeId",
 	            type: "GET",
 	            dataType: 'json',
 	            data: {
@@ -133,7 +133,7 @@
 		    }
 		    $("#addStatus").html("<b>Adding..</b>");
 		    $.ajax({
-			    url: "nuapi/addNode",
+			    url: "api/addNode",
 			    type: "POST",
 			    data: {
 				    name: $("#callsign").val(),
