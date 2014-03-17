@@ -89,7 +89,7 @@
     
     function refreshNodeList() {
         $.ajax({
-	        url: "api/nodeInfo",
+	        url: "nuapi/nodeInfo",
 	        type: "GET",
 	        dataType: 'json',
 	        success: function( data ) {
@@ -97,10 +97,14 @@
 	                var output="";
 	                var dataLength = data.length;
                     for (var i=0; i<dataLength; i++) {
-                        output+='<div id="'+data[i].i+'_row" class="browse_item row">';
-                        output+='<div class="col-md-3"><b>'+data[i].n+'</b></div>';
+                        output+='<div id="'+data[i].id+'_row" class="browse_item row">';
+                        output+='<div class="col-md-3"><b>'+data[i].name.trim()+'</b></div>';
                         //output+='<div class="col-md-6">'+data[i].d+'</div>';
-                        output+='<div class="col-md-3">'+data[i].o+'</div>';
+                        if(data[i].owner!=null) {
+                            output+='<div class="col-md-3">'+data[i].owner.trim()+'</div>';
+                        } else {
+                            output+='<div class="col-md-3"></div>';
+                        }
                         output+='</div>';
                     }
 	                $("#nodelist-inner").html(output);
