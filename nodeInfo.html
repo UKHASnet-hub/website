@@ -133,7 +133,7 @@
     
     function getNodeInfo() {
         $.ajax({
-	        url: "api/nodeInfo",
+	        url: "nuapi/nodeInfo",
 	        type: "GET",
 	        data: {
 	            id: urlParam('id')
@@ -142,10 +142,10 @@
 	        success: function( data ) {
 	            if(typeof(data.length)!= 'undefined' && data.length!=0) {
 	                var output="";
-	                output+='<h1>'+data[0].n+'</h1>';
-	                output+='<p class="lead">'+data[0].o+'</p>';
+	                output+='<h1>'+data[0].name.trim()+'</h1>';
+	                if(data[0].owner!=null) output+='<p class="lead">'+data[0].owner.trim()+'</p>';
 	                $("#nodeinfo").html(output);
-	                document.title = data[0].n+" - UKHASnet";
+	                document.title = data[0].name.trim()+" - UKHASnet";
                     if(pageStarting) {
                         pageStarting=false;
                     }
@@ -164,7 +164,7 @@
     
     function getNodeLData() {
         $.ajax({
-	        url: "api/nodeLData",
+	        url: "nuapi/nodeLData",
 	        type: "GET",
 	        data: {
 	            id: urlParam('id')
@@ -195,7 +195,7 @@
     
     function getNodeData() {
         $.ajax({
-	        url: "api/nodeData",
+	        url: "nuapi/nodeData",
 	        type: "GET",
 	        data: {
 	            id: urlParam('id'),
@@ -233,7 +233,7 @@
     
     function updateNodeData() {
         $.ajax({
-	        url: "api/nodeData",
+	        url: "nuapi/nodeData",
 	        type: "GET",
 	        data: {
 	            id: urlParam('id'),
