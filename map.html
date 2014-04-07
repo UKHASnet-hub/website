@@ -87,12 +87,6 @@
         iconAnchor:   [13, 32], // point of the icon which will correspond to marker's location
         popupAnchor: [0, -32]
     });
-    deadIcon = L.icon({
-        iconUrl: 'static/icons/antenna-red.png',
-        iconSize:     [26, 32], // size of the icon
-        iconAnchor:   [13, 32], // point of the icon which will correspond to marker's location
-        popupAnchor: [0, -32]
-    });
     
     refreshNodes();
     
@@ -110,27 +104,19 @@
 	                var utcTime = moment.utc().unix();
 	                var dataLength = data.length;
 	                for (var i=0; i<dataLength; i++) {
-	                    if(data[i].ltime<utcTime-24*3600) {
+	                    if(data[i].ltime<utcTime-7*24*3600) {
 	                        continue;
-	                    }
-	                    if(data[i].ltime>utcTime-3600) {
-	                        var nodeIcon = activeIcon;
-	                    } else {
-	                        var nodeIcon = deadIcon;
 	                    }
 	                    var popupHtml = '<b style="font-size:12px">'+data[i].name.trim()+"</b> (<a href='/nodeInfo?id="+data[i].id+"' target='_blank'>node info</a>)<br>";
 	                    if(data[i].owner!=null) popupHtml+="<b>Owner:</b> "+data[i].owner.trim()+"<br>";
-                        popupHtml+="<b>Last Active:</b> <i>"+moment(data[i].ltime*1000).fromNow()+"</i>";
 	                    if(!nodeMarkers[data[i].id]) {
 	                        nodeMarkers[data[i].id] = L.marker([data[i].lat,data[i].lon], {
                                 title: data[i].name.trim(),
-                                icon: nodeIcon
+                                icon: activeIcon
                             }).addTo(map);
                             nodeMarkers[data[i].id].bindPopup(popupHtml);
                         } else {
-                            nodeMarkers[data[i].id].setIcon(nodeIcon);
                             nodeMarkers[data[i].id].setLatLng([data[i].lat,data[i].lon]);
-                            nodeMarkers[data[i].id].setPopupContent(popupHtml);
                         }
                     }
 		        }
