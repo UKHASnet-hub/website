@@ -28,6 +28,15 @@ NOTE: This is not intended for local installation and use, it is hosted on githu
 
 Only a HTML capable server is required, however for data retrieval and display you will need a working copy of the ukhasnet-api Daemon reverse-proxied behind /api/
 
+### Grunt
+
+Draft:
+
+* cd UKHASnet-www/
+* Install: nodejs, libfontconfig1
+* npm install
+* node_modules/.bin/grunt
+
 ## GPL v3, Copyright 2013
 
 * Phil Crump
