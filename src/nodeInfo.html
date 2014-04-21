@@ -249,7 +249,7 @@
                     currentGraphData = [];
                     for (var i=0; i<data[j].d.length; i++) { // For each packet
                         currentGraphData[i] = [];
-                        currentGraphData[i][0] = moment.unix(data[j].d[i].t).toDate(); // TODO: Write a custom, faster parser?
+                        currentGraphData[i][0] = moment.unix(data[j].d[i].t).toDate(); // TODO: Use RFC3339, for moment-less (faster) parsing
                         currentGraphData[i][1] = data[j].d[i].d;
                     }
                     if(graphObjs[j]) { 
