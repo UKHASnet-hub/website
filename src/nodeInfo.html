@@ -252,17 +252,20 @@
                         currentGraphData[i][0] = moment.unix(data[j].d[i].t).toDate(); // TODO: Write a custom, faster parser?
                         currentGraphData[i][1] = data[j].d[i].d;
                     }
-                    if(graphObjs[j]) { graphObjs[j].destroy(); }
-                    graphObjs[j] = new Dygraph(
-                        document.getElementById('nodegraph-'+data[j].t+data[j].i),
-                        currentGraphData, {
-                            title: data[j].tn,
-                            //fillGraph: true,
-                            ylabel: data[j].t,
-                            labels: ['Time', data[j].tn],
-                            labelsDivWidth:275 // Legend width
-                        }
-                    );
+                    if(graphObjs[j]) { 
+                        graphObjs[j].updateOptions({'file': currentGraphData});
+                    } else {
+                        graphObjs[j] = new Dygraph(
+                            document.getElementById('nodegraph-'+data[j].t+data[j].i),
+                            currentGraphData, {
+                                title: data[j].tn,
+                                //fillGraph: true,
+                                ylabel: data[j].t,
+                                labels: ['Time', data[j].tn],
+                                labelsDivWidth:275 // Legend width
+                            }
+                        );
+                    }
                 }
                 $("#graphload-status").html("");
 	        }
