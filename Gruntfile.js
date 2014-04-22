@@ -5,11 +5,22 @@ module.exports = function(grunt) {
         cwd: 'src/', expand: true, src: '**', dest: 'dist/'
       }
     },
+    // Remove unused CSS across multiple files, compressing the final output
+    uncss: {
+    dist: {
+      files: [
+        { src: 'src/*.html', dest: 'dist/static/compiled.css'}
+      ]
+      },
+      options: {
+        compress:true
+      }
+    },
     cssmin: {
       dist: {
-        files: {
-          'dist/static/compiled.min.css': ['dist/static/bootstrap/css/bootstrap.min.css', 'dist/static/bootstrap/css/ukhasnet.css']
-        },
+        files: [
+          { src: 'dist/static/compiled.css', dest: 'dist/static/compiled.min.css' }
+        ],
         options: {
           keepSpecialComments: 0
         }
@@ -54,10 +65,11 @@ module.exports = function(grunt) {
   });
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-uncss');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-processhtml');
   grunt.loadNpmTasks('grunt-contrib-compress');
   // Default tasks.
-  grunt.registerTask('default', ['copy', 'cssmin', 'uglify', 'processhtml', 'compress']);
+  grunt.registerTask('default', ['copy', 'uncss', 'cssmin', 'uglify', 'processhtml', 'compress']);
 };
