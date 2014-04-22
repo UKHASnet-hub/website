@@ -5,21 +5,10 @@ module.exports = function(grunt) {
         cwd: 'src/', expand: true, src: '**', dest: 'dist/'
       }
     },
-    // Remove unused CSS across multiple files, compressing the final output
-    uncss: {
-    dist: {
-      files: [
-        { src: 'src/*.html', dest: 'dist/static/compiled.css'}
-      ]
-      },
-      options: {
-        compress:true
-      }
-    },
     cssmin: {
       dist: {
         files: [
-          { src: 'dist/static/compiled.css', dest: 'dist/static/compiled.min.css' }
+          { src: 'dist/static/bootstrap/css/ukhasnet.css', dest: 'dist/static/bootstrap/css/ukhasnet.min.css' }
         ],
         options: {
           keepSpecialComments: 0
@@ -28,8 +17,16 @@ module.exports = function(grunt) {
     },
     concat: {
         dist: {
-            src: ['dist/static/jquery/jquery-1.11.0.min.js', 'dist/static/bootstrap/js/bootstrap.min.js'],
-            dest: 'dist/static/jquerybootstrap.min.js',
+            files: {
+                'dist/static/jquerybootstrap.min.js': [
+                    'dist/static/jquery/jquery-1.11.0.min.js',
+                    'dist/static/bootstrap/js/bootstrap.min.js'
+                ],
+                'dist/static/compiled.min.css': [
+                    'dist/static/bootstrap/css/bootstrap.min.css',
+                    'dist/static/bootstrap/css/ukhasnet.min.css'
+                ],
+            },
         },
     },
     processhtml: {
@@ -64,11 +61,10 @@ module.exports = function(grunt) {
   });
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-uncss');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-processhtml');
   grunt.loadNpmTasks('grunt-contrib-compress');
   // Default tasks.
-  grunt.registerTask('default', ['copy', 'uncss', 'cssmin', 'concat', 'processhtml', 'compress']);
+  grunt.registerTask('default', ['copy', 'cssmin', 'concat', 'processhtml', 'compress']);
 };
