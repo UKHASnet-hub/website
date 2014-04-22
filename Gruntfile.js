@@ -18,7 +18,7 @@ module.exports = function(grunt) {
     uglify: {
       dist: {
         files: {
-          'dist/static/jquerybootstrap.min.js': ['src/static/jquery/jquery-1.11.0.min.js','static/bootstrap/js/bootstrap.min.js']
+          'dist/static/jquerybootstrap.min.js': ['dist/static/jquery/jquery-1.11.0.min.js','dist/static/bootstrap/js/bootstrap.min.js']
         }
       }
     },
