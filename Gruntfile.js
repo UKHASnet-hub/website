@@ -26,12 +26,11 @@ module.exports = function(grunt) {
         }
       }
     },
-    uglify: {
-      dist: {
-        files: {
-          'dist/static/jquerybootstrap.min.js': ['dist/static/jquery/jquery-1.11.0.min.js','dist/static/bootstrap/js/bootstrap.min.js']
-        }
-      }
+    concat: {
+        dist: {
+            src: ['dist/static/jquery/jquery-1.11.0.min.js', 'dist/static/bootstrap/js/bootstrap.min.js'],
+            dest: 'dist/static/jquerybootstrap.min.js',
+        },
     },
     processhtml: {
       dist: {
@@ -67,9 +66,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-uncss');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-processhtml');
   grunt.loadNpmTasks('grunt-contrib-compress');
   // Default tasks.
-  grunt.registerTask('default', ['copy', 'uncss', 'cssmin', 'uglify', 'processhtml', 'compress']);
+  grunt.registerTask('default', ['copy', 'uncss', 'cssmin', 'concat', 'processhtml', 'compress']);
 };
