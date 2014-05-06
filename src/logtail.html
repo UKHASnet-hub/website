@@ -80,7 +80,8 @@
         <div class="row title">
             <div class="col-md-3">Upload id, Timestamp</div>
             <div class="col-md-4">Raw Packet</div>
-            <div class="col-md-2">Gateway</div>
+            <div class="col-md-1">Gateway</div>
+            <div class="col-md-1">RSSI</div>
             <div class="col-md-3">Parse Status</div>
         </div>
         <div id="logtail-inner">
@@ -106,7 +107,12 @@
                 output+='<div id="'+data[i].i+'_row" class="row">';
                 output+='<div id="'+data[i].i+'_timestamp" class="col-md-3"><b>['+data[i].i+',&nbsp;'+moment(data[i].t*1000).format("YYYY-MM-DD HH:mm:ss")+']</b></div>';
                 output+='<div id="'+data[i].i+'_packet" class="col-md-4">'+data[i].p+'</div>';
-                output+='<div id="'+data[i].i+'_uploader" class="col-md-2"><a href="nodeInfo?id='+data[i].ni+'">'+data[i].nn+'</a></div>';
+                output+='<div id="'+data[i].i+'_uploader" class="col-md-1"><a href="nodeInfo?id='+data[i].ni+'">'+data[i].nn+'</a></div>';
+                if(data[i].r==0 || typeof(data[i].r)=='undefined') {
+                    output+='<div id="'+data[i].i+'_rssi" class="col-md-1"></div>';
+                } else {
+                    output+='<div id="'+data[i].i+'_rssi" class="col-md-1">'+data[i].r+' dBm</div>';
+                }
                 output+='<div id="'+data[i].i+'_state" class="col-md-3">'+data[i].s+'</div>';
                 output+='</div>';
             }
@@ -122,7 +128,12 @@
         output+='<div id="'+data.i+'_row" class="row">';
         output+='<div id="'+data.i+'_timestamp" class="col-md-3"><b>['+data.i+',&nbsp;'+moment(data.t*1000).format("YYYY-MM-DD HH:mm:ss")+']</b></div>';
         output+='<div id="'+data.i+'_packet" class="col-md-4">'+data.p+'</div>';
-        output+='<div id="'+data.i+'_uploader" class="col-md-2"><a href="nodeInfo?id='+data.ni+'">'+data.nn+'</a></div>';
+        output+='<div id="'+data.i+'_uploader" class="col-md-1"><a href="nodeInfo?id='+data.ni+'">'+data.nn+'</a></div>';
+        if(data[i].r==0 || typeof(data[i].r)=='undefined') {
+            output+='<div id="'+data.i+'_rssi" class="col-md-1"></div>';
+        } else {
+            output+='<div id="'+data.i+'_rssi" class="col-md-1">'+data.r+' dBm</div>';
+        }
         output+='<div id="'+data.i+'_state" class="col-md-3">'+data.s+'</div>';
         output+='</div>';
         $("#logtail-inner").html(output+$("#logtail-inner").html());
