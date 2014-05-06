@@ -84,11 +84,18 @@
     
     map.addLayer(osm);
     
-    activeIcon = L.icon({
+    var icons = [];
+    icons["antenna-green"] = L.icon({
         iconUrl: 'static/icons/antenna-green.png',
         iconSize:     [26, 32], // size of the icon
         iconAnchor:   [13, 32], // point of the icon which will correspond to marker's location
         popupAnchor: [0, -32]
+    });
+    icons["balloon-blue"] = L.icon({
+        iconUrl: 'static/icons/balloon-blue.png',
+        iconSize:     [46, 84], // size of the icon
+        iconAnchor:   [23, 80],
+        popupAnchor: [0, -80]
     });
     
     refreshNodes();
@@ -111,7 +118,7 @@
 	                    if(!nodeMarkers[data[i].id]) {
 	                        nodeMarkers[data[i].id] = L.marker([data[i].lat,data[i].lon], {
                                 title: data[i].name.trim(),
-                                icon: activeIcon
+                                icon: icons[data[i].icon]
                             }).addTo(map);
                             nodeMarkers[data[i].id].bindPopup(popupHtml);
                         } else {
