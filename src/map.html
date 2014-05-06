@@ -148,22 +148,27 @@
 	            if(data.length!=0) {
 	                var dataLength = data.length;
 	                for (var i=0; i<dataLength; i++) {
-	                    var popupHtml = '<b style="font-size:12px">'+data[i].name.trim()+"</b> (<a href='/nodeInfo?id="+data[i].id+"' target='_blank'>node info</a>)<br>";
+	                    var nodeName = data[i].name.trim();
+	                    var popupHtml = '<b style="font-size:12px">'+nodeName+"</b> (<a href='/nodeInfo?id="+data[i].id+"' target='_blank'>node info</a>)<br>";
                         if(data[i].owner!=null) popupHtml+="<b>Owner:</b> "+data[i].owner.trim()+"<br>";
-                        
-                        nodeMarkers[data[i].name.trim()]=[];
-                        
-                        nodeMarkers[data[i].name.trim()][0] = L.marker([data[i].lat,data[i].lon], {
-                            title: data[i].name.trim(),
-                            icon: icons[data[i].icon]
-                        }).addTo(map);
-                        nodeMarkers[data[i].name.trim()][0].bindPopup(popupHtml);
-                        nodeMarkers[data[i].name.trim()][1] = L.marker([data[i].lat,data[i].lon], {
-                            icon: txIcon
-                        }).addTo(map);
-                        nodeMarkers[data[i].name.trim()][2] = L.marker([data[i].lat,data[i].lon], {
-                            icon: gateIcon
-                        }).addTo(map);
+                        if(!nodeMarkers[nodeName]) {
+                            nodeMarkers[nodeName]=[];
+                            nodeMarkers[nodeName][0] = L.marker([data[i].lat,data[i].lon], {
+                                title: nodeName,
+                                icon: icons[data[i].icon]
+                            }).addTo(map);
+                            nodeMarkers[nodeName][0].bindPopup(popupHtml);
+                            nodeMarkers[nodeName][1] = L.marker([data[i].lat,data[i].lon], {
+                                icon: txIcon
+                            }).addTo(map);
+                            nodeMarkers[nodeName][2] = L.marker([data[i].lat,data[i].lon], {
+                                icon: gateIcon
+                            }).addTo(map);
+                        } else {
+ -                          nodeMarkers[nodeName][0].setLatLng([data[i].lat,data[i].lon]);
+ -                          nodeMarkers[nodeName][1].setLatLng([data[i].lat,data[i].lon]);
+ -                          nodeMarkers[nodeName][2].setLatLng([data[i].lat,data[i].lon]);
+ -                      }
                     }
 		        }
 	        }
