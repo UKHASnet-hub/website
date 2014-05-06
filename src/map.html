@@ -67,7 +67,6 @@
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <!-- /build -->
     <script src="static/leaflet/leaflet.js"></script>
-    <script src="static/moment.min.js"></script>
     <script>
     var nodeMarkers=[];
     
@@ -105,7 +104,6 @@
 	        dataType: 'json',
 	        success: function( data ) {
 	            if(data.length!=0) {
-	                var utcTime = moment.utc().unix();
 	                var dataLength = data.length;
 	                for (var i=0; i<dataLength; i++) {
 	                    var popupHtml = '<b style="font-size:12px">'+data[i].name.trim()+"</b> (<a href='/nodeInfo?id="+data[i].id+"' target='_blank'>node info</a>)<br>";
