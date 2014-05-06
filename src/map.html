@@ -123,14 +123,12 @@
     
     txIcon = L.divIcon({
         iconSize: [50,50],
-        className: 'leaflet-txpulse-anim',
-        zIndexOffset: -9000
+        className: 'leaflet-txpulse-anim'
     });
 
     gateIcon = L.divIcon({
         iconSize: [50,50],
-        className: 'leaflet-gatepulse-anim',
-        zIndexOffset: -8000
+        className: 'leaflet-gatepulse-anim'
     });
     
     refreshNodes();
@@ -159,10 +157,12 @@
                             }).addTo(map);
                             nodeMarkers[nodeName][0].bindPopup(popupHtml);
                             nodeMarkers[nodeName][1] = L.marker([data[i].lat,data[i].lon], {
-                                icon: txIcon
+                                icon: txIcon,
+                                zIndexOffset: -1000
                             }).addTo(map);
                             nodeMarkers[nodeName][2] = L.marker([data[i].lat,data[i].lon], {
-                                icon: gateIcon
+                                icon: gateIcon,
+                                zIndexOffset: -1100
                             }).addTo(map);
                         } else {
                             nodeMarkers[nodeName][0].setLatLng([data[i].lat,data[i].lon]);
