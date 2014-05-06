@@ -83,8 +83,16 @@
             <div class="form-group">
                 <label for="owner" class="col-xs-2 control-label">Owner/Description</label>
                 <div class="col-xs-3">
-                  <input type="text" class="form-control" id="owner" placeholder="">
+                  <input type="text" class="form-control selection-dependent" id="owner" placeholder="">
                 </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="type-select" class="col-xs-2 control-label">Type</label>
+              <div class="col-xs-3">
+                <select name="type-select" id="type-select" class="form-control input-large selection-dependent">
+                </select>
+              </div>
             </div>
 
             <!-- Button -->
@@ -109,9 +117,16 @@
     var nodeData=[];
     
     $(document).ready(function() {
+        $(".selection-dependent").attr("disabled","disabled");
         $("#node-select").change(function() {
             if($("#node-select").val()!="select") {
+                $(".selection-dependent").removeAttr('disabled');
                 $("#owner").val(nodeData[$("#node-select").val()].owner);
+                $("#type-select").val(nodeData[$("#node-select").val()].typeid);
+            } else {
+                $(".selection-dependent").attr("disabled","disabled");
+                $("#owner").val("");
+                $("#type-select").val("");
             }
 	    });
 	    // Add Node Form 'Submit' Action
@@ -127,7 +142,8 @@
 			    type: "POST",
 			    data: {
 				    id: $("#node-select").val().trim(),
-				    owner: $("#owner").val().trim()
+				    owner: $("#owner").val().trim(),
+				    typeid: $("#type-select").val().trim()
 			    },
 			    dataType: 'json',
 			    success: function( data ) {
@@ -150,6 +166,21 @@
 	                    $("#node-select").append("<option value='"+data[i].id+"'>"+data[i].name.trim()+"</option>");
 	                    nodeData[data[i].id] = data[i];
 	                }
+	            }
+            }
+        });
+        $.ajax({
+            url: "api/nodeTypes",
+            type: "GET",
+            dataType: 'json',
+            success: function( data ) {
+	            if(data.length!=0) {
+	                var dataLength = data.length;
+	                for (var i=0; i<dataLength; i++) {
+	                    $("#type-select").append("<option value='"+data[i][0]+"'>"+data[i][1]+"</option>");
+	                    nodeData[data[i].id] = data[i];
+	                }
+                    $("#type-select").val("");
 	            }
             }
         });
