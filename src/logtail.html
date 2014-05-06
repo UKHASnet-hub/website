@@ -129,7 +129,7 @@
         output+='<div id="'+data.i+'_timestamp" class="col-md-3"><b>['+data.i+',&nbsp;'+moment(data.t*1000).format("YYYY-MM-DD HH:mm:ss")+']</b></div>';
         output+='<div id="'+data.i+'_packet" class="col-md-4">'+data.p+'</div>';
         output+='<div id="'+data.i+'_uploader" class="col-md-1"><a href="nodeInfo?id='+data.ni+'">'+data.nn+'</a></div>';
-        if(data[i].r==0 || typeof(data[i].r)=='undefined') {
+        if(data.r==0 || typeof(data.r)=='undefined') {
             output+='<div id="'+data.i+'_rssi" class="col-md-1"></div>';
         } else {
             output+='<div id="'+data.i+'_rssi" class="col-md-1">'+data.r+' dBm</div>';
