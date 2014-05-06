@@ -20,6 +20,28 @@
     html, body, #map {
         height: 100%;
     }
+    .leaflet-txpulse-anim {
+        border-radius: 50%;
+        border: none;
+        opacity: 0;
+        background: -webkit-radial-gradient(
+            circle,
+            rgba(255, 0, 0, 1.0),
+            rgba(255, 0, 0, 0)
+        );
+        transition: opacity 0.1s ease;
+    }
+    .leaflet-gatepulse-anim {
+        border-radius: 50%;
+        border: none;
+        opacity: 0;
+        background: -webkit-radial-gradient(
+            circle,
+            rgba(0, 0, 255, 1.0),
+            rgba(0, 0, 255, 0)
+        );
+        transition: opacity 0.1s ease;
+    }
     </style>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -67,6 +89,7 @@
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <!-- /build -->
     <script src="static/leaflet/leaflet.js"></script>
+    <script src="static/socket.io.min.js"></script>
     <script>
     var nodeMarkers=[];
     
@@ -98,6 +121,18 @@
         popupAnchor: [0, -80]
     });
     
+    txIcon = L.divIcon({
+        iconSize: [50,50],
+        className: 'leaflet-txpulse-anim',
+        zIndexOffset: -9000
+    });
+
+    gateIcon = L.divIcon({
+        iconSize: [50,50],
+        className: 'leaflet-gatepulse-anim',
+        zIndexOffset: -8000
+    });
+    
     refreshNodes();
     
     setInterval(function() {
@@ -114,21 +149,51 @@
 	                var dataLength = data.length;
 	                for (var i=0; i<dataLength; i++) {
 	                    var popupHtml = '<b style="font-size:12px">'+data[i].name.trim()+"</b> (<a href='/nodeInfo?id="+data[i].id+"' target='_blank'>node info</a>)<br>";
-	                    if(data[i].owner!=null) popupHtml+="<b>Owner:</b> "+data[i].owner.trim()+"<br>";
-	                    if(!nodeMarkers[data[i].id]) {
-	                        nodeMarkers[data[i].id] = L.marker([data[i].lat,data[i].lon], {
-                                title: data[i].name.trim(),
-                                icon: icons[data[i].icon]
-                            }).addTo(map);
-                            nodeMarkers[data[i].id].bindPopup(popupHtml);
-                        } else {
-                            nodeMarkers[data[i].id].setLatLng([data[i].lat,data[i].lon]);
-                        }
+                        if(data[i].owner!=null) popupHtml+="<b>Owner:</b> "+data[i].owner.trim()+"<br>";
+                        
+                        nodeMarkers[data[i].name.trim()]=[];
+                        
+                        nodeMarkers[data[i].name.trim()][0] = L.marker([data[i].lat,data[i].lon], {
+                            title: data[i].name.trim(),
+                            icon: icons[data[i].icon]
+                        }).addTo(map);
+                        nodeMarkers[data[i].name.trim()][0].bindPopup(popupHtml);
+                        nodeMarkers[data[i].name.trim()][1] = L.marker([data[i].lat,data[i].lon], {
+                            icon: txIcon
+                        }).addTo(map);
+                        nodeMarkers[data[i].name.trim()][2] = L.marker([data[i].lat,data[i].lon], {
+                            icon: gateIcon
+                        }).addTo(map);
                     }
 		        }
 	        }
         });
     }
+    
+    var socket = io.connect("/logtail");
+
+    socket.on("upload_row", function(message, urgency){
+        data = JSON.parse(message);
+        var regExp = /\[([^\]]+)\]/;
+        var callsigns = regExp.exec(data.p)[1].split(',');
+        var callsignsLength = callsigns.length;
+        var maxi = 0;
+        for (var i=0; i<callsignsLength; i++) {
+            setTimeout(function(i) {
+                nodeMarkers[callsigns[i]][1].setOpacity(1);
+            },i*200, i);
+            setTimeout(function(i) {
+                nodeMarkers[callsigns[i]][1].setOpacity(0);
+            },(i*200)+100, i);
+            maxi = i;
+        }
+        setTimeout(function(gateway) {
+            nodeMarkers[gateway][2].setOpacity(1);
+        },(maxi+1)*200, data.nn);
+        setTimeout(function(gateway) {
+            nodeMarkers[gateway][2].setOpacity(0);
+        },((maxi+1)*200)+100, data.nn);
+    });
     </script>
     <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-48058948-1', 'ukhas.net');ga('send', 'pageview');</script>
   </body>
