@@ -93,7 +93,6 @@
     <script src="static/jquery/jquery-1.11.0.min.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <!-- /build -->
-    <script src="static/moment.min.js"></script>
     <script src="static/socket.io.min.js"></script>
     <script>
     
@@ -106,7 +105,9 @@
             var dataLength = data.length;
             for (var i=0; i<dataLength; i++) {
                 output+='<div id="'+data[i].i+'_row" class="row">';
-                output+='<div id="'+data[i].i+'_timestamp" class="col-md-3"><b>['+data[i].i+',&nbsp;'+moment(Date.parse(data[i].t)).format("YYYY-MM-DD HH:mm:ss")+']</b></div>';
+                var rowdate = new Date();
+                rowdate.setTime(Date.parse(data[i].t));
+                output+='<div id="'+data[i].i+'_timestamp" class="col-md-3"><b>['+data[i].i+',&nbsp;'+rowdate.toLocaleDateString()+' '+rowdate.toLocaleTimeString()+']</b></div>';
                 output+='<div id="'+data[i].i+'_packet" class="col-md-5">'+data[i].p+'</div>';
                 output+='<div id="'+data[i].i+'_uploader" class="col-md-1"><a href="nodeInfo?id='+data[i].ni+'">'+data[i].nn+'</a></div>';
                 if(data[i].r==0 || typeof(data[i].r)=='undefined') {
@@ -127,7 +128,9 @@
         var output="";
         data=JSON.parse(message);
         output+='<div id="'+data.i+'_row" class="row">';
-        output+='<div id="'+data.i+'_timestamp" class="col-md-3"><b>['+data.i+',&nbsp;'+moment(data.t*1000).format("YYYY-MM-DD HH:mm:ss")+']</b></div>';
+        var rowdate = new Date();
+        rowdate.setTime(data.t*1000);
+        output+='<div id="'+data.i+'_timestamp" class="col-md-3"><b>['+data.i+',&nbsp;'+rowdate.toLocaleDateString()+' '+rowdate.toLocaleTimeString()+']</b></div>';
         output+='<div id="'+data.i+'_packet" class="col-md-5">'+data.p+'</div>';
         output+='<div id="'+data.i+'_uploader" class="col-md-1"><a href="nodeInfo?id='+data.ni+'">'+data.nn+'</a></div>';
         if(data.r==0 || typeof(data.r)=='undefined') {
