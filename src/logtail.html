@@ -129,7 +129,7 @@
         data=JSON.parse(message);
         output+='<div id="'+data.i+'_row" class="row">';
         var rowdate = new Date();
-        rowdate.setTime(data.t*1000);
+        rowdate.setTime(Date.parse(data.t));
         output+='<div id="'+data.i+'_timestamp" class="col-md-3"><b>['+data.i+',&nbsp;'+rowdate.toLocaleDateString()+' '+rowdate.toLocaleTimeString()+']</b></div>';
         output+='<div id="'+data.i+'_packet" class="col-md-5">'+data.p+'</div>';
         output+='<div id="'+data.i+'_uploader" class="col-md-1"><a href="nodeInfo?id='+data.ni+'">'+data.nn+'</a></div>';
