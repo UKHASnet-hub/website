@@ -105,9 +105,7 @@
             var dataLength = data.length;
             for (var i=0; i<dataLength; i++) {
                 output+='<div id="'+data[i].i+'_row" class="row">';
-                var rowdate = new Date();
-                rowdate.setTime(Date.parse(data[i].t));
-                output+='<div id="'+data[i].i+'_timestamp" class="col-md-3"><b>['+data[i].i+',&nbsp;'+rowdate.toLocaleDateString()+' '+rowdate.toLocaleTimeString()+']</b></div>';
+                output+='<div id="'+data[i].i+'_timestamp" class="col-md-3"><b>['+data[i].i+',&nbsp;'+datetime_str(data[i].t)+']</b></div>';
                 output+='<div id="'+data[i].i+'_packet" class="col-md-5">'+data[i].p+'</div>';
                 output+='<div id="'+data[i].i+'_uploader" class="col-md-1"><a href="nodeInfo?id='+data[i].ni+'">'+data[i].nn+'</a></div>';
                 if(data[i].r==0 || typeof(data[i].r)=='undefined') {
@@ -128,9 +126,7 @@
         var output="";
         data=JSON.parse(message);
         output+='<div id="'+data.i+'_row" class="row">';
-        var rowdate = new Date();
-        rowdate.setTime(Date.parse(data.t));
-        output+='<div id="'+data.i+'_timestamp" class="col-md-3"><b>['+data.i+',&nbsp;'+rowdate.toLocaleDateString()+' '+rowdate.toLocaleTimeString()+']</b></div>';
+        output+='<div id="'+data.i+'_timestamp" class="col-md-3"><b>['+data.i+',&nbsp;'+datetime_str(data.t)+']</b></div>';
         output+='<div id="'+data.i+'_packet" class="col-md-5">'+data.p+'</div>';
         output+='<div id="'+data.i+'_uploader" class="col-md-1"><a href="nodeInfo?id='+data.ni+'">'+data.nn+'</a></div>';
         if(data.r==0 || typeof(data.r)=='undefined') {
@@ -162,6 +158,11 @@
             $("#feed-toggle").text("Pause");
         }
     });
+    
+    function datetime_str(rfc3339_string) {
+        var date_obj = new Date(rfc3339_string)
+        return date_obj.toLocaleDateString()+' '+date_obj.toLocaleTimeString()
+    }
     </script>
     <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-48058948-1', 'ukhas.net');ga('send', 'pageview');</script>
   </body>
