@@ -137,7 +137,7 @@
     
     function getNodeInfo() {
         $.ajax({
-	        url: "http://www.ukhas.net/api/nodeInfo",
+	        url: "api/nodeInfo",
 	        type: "GET",
 	        data: {
 	            id: urlParam('id')
@@ -168,7 +168,7 @@
     
     function getNodePackets() {
         $.ajax({
-	        url: "http://www.ukhas.net/api/nodePackets",
+	        url: "api/nodePackets",
 	        type: "GET",
 	        data: {
 	            id: urlParam('id')
@@ -198,7 +198,7 @@
     
     function getNodeGraphData() {
         $.ajax({
-	        url: "http://www.ukhas.net/api/nodeGraphData",
+	        url: "api/nodeGraphData",
 	        type: "GET",
 	        data: {
 	            id: urlParam('id'),
@@ -239,7 +239,7 @@
     
     function updateNodeGraphData() {
         $.ajax({
-	        url: "http://www.ukhas.net/api/nodeGraphData",
+	        url: "api/nodeGraphData",
 	        type: "GET",
 	        data: {
 	            id: urlParam('id'),
