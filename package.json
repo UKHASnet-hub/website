@@ -1,9 +1,22 @@
 {
-  "name": "UKHASnet-www",
+  "name": "website",
   "version": "1.0.0",
+  "description": "Website files for ukhas.net",
+  "author": "UKHASnet",
+  "license": "GPLv3",
+  "contributors": [ 
+    {
+      "name": "Phil Crump",
+      "email": "phildcrump@gmail.com"
+    } 
+  ],
+  "homepage": "https://github.com/UKHASnet-hub/website",
   "repository": {
     "type": "git",
-    "url": "http://github.com/UKHASnet/UKHASnet-www"
+    "url": "git@github.com:UKHASnet-hub/website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/UKHASnet-hub/upload-api-daemon/issues"
   },
   "devDependencies": {
     "grunt": "^0.4.4",
