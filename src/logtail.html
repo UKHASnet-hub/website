@@ -136,7 +136,7 @@
         }
         output+='<div id="'+data.i+'_state" class="col-md-2">'+data.s+'</div>';
         output+='</div>';
-        $("#logtail-inner").html(output+$("#logtail-inner").html());
+        $("#logtail-inner").prepend(output);
     });
     
     Socket.on("upload_parse", function(message, urgency){
