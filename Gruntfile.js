@@ -45,17 +45,46 @@ module.exports = function(grunt) {
     compress: {
       dist: {
         options: {
-          mode: 'gzip'
+          mode: 'gzip',
+          level: 9
         },
-        expand: true,
-        cwd: 'dist/',
-        src: ['*.html',
-              'static/*.min.css',
-              'static/*.js',
-              'static/leaflet/leaflet.js',
-              'static/leaflet/leaflet.css'
-        ],
-        dest: 'dist/'
+        files: [
+            {
+              expand: true,
+              cwd: 'dist/',
+              src: ['*.html'],
+              dest: 'dist/',
+              ext: '.html.gz'
+            },
+            {
+              expand: true,
+              cwd: 'dist/',
+	      src: ['static/*.min.css'],
+              dest: 'dist/',
+              ext: '.min.css.gz'
+            },
+            {
+              expand: true,
+              cwd: 'dist/',
+              src: ['static/*.js'],
+              dest: 'dist/',
+              ext: '.js.gz'
+            },
+            {
+              expand: true,
+              cwd: 'dist/',
+              src: ['static/leaflet/leaflet.js'],
+              dest: 'dist/',
+              ext: '.js.gz'
+            },
+            {
+              expand: true,
+              cwd: 'dist/',
+              src: ['static/leaflet/leaflet.css'],
+              dest: 'dist/',
+              ext: '.css.gz'
+            }
+        ]
       }
     }
   });
