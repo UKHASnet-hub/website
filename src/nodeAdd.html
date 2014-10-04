@@ -149,6 +149,8 @@
 			        	$("#addStatus").html("<b style='color:green;'>Node Added.</b>");
 			       	} else if(data.error==1) {
 			       		$("#addStatus").html("<b style='color:red;'>Error, Node with that name already exists.</b>");
+			       	} else if(data.error==2) {
+			       		$("#addStatus").html("<b style='color:red;'>Please fill in a Node Name (callsign).</b>");
 			        } else {
 			       		$("#addStatus").html("<b style='color:red;'>Unknown Error, please contact a developer.</b>");
 			        }
