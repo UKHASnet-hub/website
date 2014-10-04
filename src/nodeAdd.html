@@ -148,7 +148,9 @@
 			        if(data.error==0) {
 			        	$("#addStatus").html("<b style='color:green;'>Node Added.</b>");
 			       	} else if(data.error==1) {
-			       		$("#addStatus").html("<b style='color:red;'>Error, please consult developer.</b>");
+			       		$("#addStatus").html("<b style='color:red;'>Error, Node with that name already exists.</b>");
+			        } else {
+			       		$("#addStatus").html("<b style='color:red;'>Unknown Error, please contact a developer.</b>");
 			        }
 			    }
 		    });
