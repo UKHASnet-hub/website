@@ -96,8 +96,8 @@
     <!-- /build -->
     <script src="static/socket.io.min.js"></script>
     <script>
-    
     var Socket = io.connect("www.ukhas.net/logtail");
+    var row_fifo = []
     
     Socket.on("logtail_l200", function(message, urgency){
         data=JSON.parse(message);
@@ -137,6 +137,11 @@
         }
         output+='<div id="'+data.i+'_state" class="col-md-2">'+data.s+'</div>';
         output+='</div>';
+        row_fifo.push(data.i)
+        if(row_fifo.length>50) {
+            $("#"+row_fifo[0]+"_row").remove()
+            row_fifo.shift()
+        }
         $("#logtail-inner").prepend(output);
     });
     
