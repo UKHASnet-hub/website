@@ -85,7 +85,9 @@
         <p id="appearlowcost" class="appeardown">A simple RF standard of 2kbps FSK on 869.5 MHz allows the choice and interoperation of several cheap and easily available ISM Transceiver Modules. Combined with low power ARM Cortex Microcontrollers, you can easily build a simple AA-battery powered node for under £10.
         <br>
         <br>See <a href="/wiki/node_implementations" target="_blank">Community Implementations on the Wiki</a> for some ideas.</p>
-        <p><h2>Getting Started</h2></p>
+        <p><h2 id="titleambitious">Ambitious ></h2></p>
+        <p id="appearambitious" class="appeardown">With 65km LOS range proven at EMF 2014, with wire antennas and nodes built the same day, the only way is up! Join in as we link networks across countries and seas by high altitude balloons, and other unattended platforms (buoys, rovers, etc.).</p>
+        <p><h3>Getting Started</h3></p>
         <p>We're building up information and guides on the <a href="http://www.ukhas.net/wiki/" target="_blank">Wiki</a>. Also have a look around and do drop in on <a href="http://webchat.freenode.net/?channels=ukhasnet" target="_blank">IRC Chat (#ukhasnet)</a> to say hello to the rest of us, and ask any questions!</p>
       </div>
     
@@ -100,14 +102,20 @@
     $("#titlesimple").hover(function(){
         $("#appearsimple").slideDown("fast");
     });
-    $("#appearsimple").mouseout(function(){
+    $("#appearsimple").mouseleave(function(){
         $("#appearsimple").slideUp("fast");
     });
     $("#titlelowcost").hover(function(){
         $("#appearlowcost").slideDown("fast");
     });
-    $("#appearlowcost").mouseout(function(){
+    $("#appearlowcost").mouseleave(function(){
         $("#appearlowcost").slideUp("fast");
+    });
+    $("#titleambitious").hover(function(){
+        $("#appearambitious").slideDown("fast");
+    });
+    $("#appearambitious").mouseleave(function(){
+        $("#appearambitious").slideUp("fast");
     });
     </script>
     <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-48058948-1', 'ukhas.net');ga('send', 'pageview');</script>
