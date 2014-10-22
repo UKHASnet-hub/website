@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     cssmin: {
       dist: {
         files: [
-          { src: 'dist/static/bootstrap/css/ukhasnet.css', dest: 'dist/static/bootstrap/css/ukhasnet.min.css' }
+          { src: 'dist/static/ukhasnet.css', dest: 'dist/static/ukhasnet.min.css' }
         ],
         options: {
           keepSpecialComments: 0
@@ -24,7 +24,7 @@ module.exports = function(grunt) {
                 ],
                 'dist/static/compiled.min.css': [
                     'dist/static/bootstrap/css/bootstrap.min.css',
-                    'dist/static/bootstrap/css/ukhasnet.min.css'
+                    'dist/static/ukhasnet.min.css'
                 ],
             },
         },
