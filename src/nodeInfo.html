@@ -137,12 +137,20 @@
     },10*1000); // Refresh Data every 10s
     
     function getNodeInfo() {
+        var dataVar;
+        if(urlParam('name')) {
+            dataVar = {
+	            name: urlParam('name')
+	        };
+	    } else {
+	        dataVar = {
+	            id: urlParam('id')
+	        };
+	    }
         $.ajax({
 	        url: "api/nodeInfo",
 	        type: "GET",
-	        data: {
-	            id: urlParam('id')
-	        },
+	        data: dataVar,
 	        dataType: 'json',
 	        success: function( data ) {
 	            if(typeof(data.length)!= 'undefined' && data.length!=0) {
@@ -168,12 +176,20 @@
     }
     
     function getNodePackets() {
+        var dataVar;
+        if(urlParam('name')) {
+            dataVar = {
+	            name: urlParam('name')
+	        };
+	    } else {
+	        dataVar = {
+	            id: urlParam('id')
+	        };
+	    }
         $.ajax({
 	        url: "api/nodePackets",
 	        type: "GET",
-	        data: {
-	            id: urlParam('id')
-	        },
+	        data: dataVar,
 	        dataType: 'json',
 	        success: function( data ) {
                 var output="";
@@ -198,13 +214,22 @@
     }
     
     function getNodeGraphData() {
+        var dataVar;
+        if(urlParam('name')) {
+            dataVar = {
+	            name: urlParam('name'),
+	            period: dataInterval
+	        };
+	    } else {
+	        dataVar = {
+	            id: urlParam('id'),
+	            period: dataInterval
+	        };
+	    }
         $.ajax({
 	        url: "api/nodeGraphData",
 	        type: "GET",
-	        data: {
-	            id: urlParam('id'),
-	            period: dataInterval
-	        },
+	        data: dataVar,
 	        dataType: 'json',
 	        success: function( data ) {
 	            for (var telem_type in data) {
@@ -239,13 +264,22 @@
     }
     
     function updateNodeGraphData() {
+        var dataVar;
+        if(urlParam('name')) {
+            dataVar = {
+	            name: urlParam('name'),
+	            period: dataInterval
+	        };
+	    } else {
+	        dataVar = {
+	            id: urlParam('id'),
+	            period: dataInterval
+	        };
+	    }
         $.ajax({
 	        url: "api/nodeGraphData",
 	        type: "GET",
-	        data: {
-	            id: urlParam('id'),
-	            period: dataInterval
-	        },
+	        data: dataVar,
 	        dataType: 'json',
 	        success: function( data ) {
 	            for (var telem_type in data) {
