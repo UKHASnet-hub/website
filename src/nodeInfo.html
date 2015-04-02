@@ -149,7 +149,6 @@
     var pageStarting=true;
     var graphObjs = [];
     var dataInterval = 48*3600; // 48 hours
-    var node_name;
 
     getNodeInfo();
     getNodePackets();
@@ -184,7 +183,6 @@
 	                if(data[0].owner!=null) output+='<p class="lead">'+data[0].owner.trim()+'</p>';
 	                $("#nodeinfo").html(output);
 	                document.title = data[0].name.trim()+" - UKHASnet";
-                    node_name = data[0].name.trim();
                     if(pageStarting) {
                         pageStarting=false;
                     }
@@ -397,8 +395,6 @@
                
                var gateway_node;
                
-               console.log('Track Node: ' + track_node);
-               
                //id: "AH6",
                //group: 2 =gateway, 1 =repeater, 3 =source, 4 =balloon
                var nodes = [{id: track_node, group:3}],
@@ -426,7 +422,6 @@
                          var output="";
                          
                          output = data.p;
-                         console.log(output);
                          
                          //process the data, extract out the path
                          var res = data.p.slice(0,-1).split("[");
@@ -435,7 +430,6 @@
                          
                          if (path[0] == track_node){
                          
-                         console.log("Found " + track_node);
                          gateway_node = data.nn;
                          
                          //add gateway node
@@ -478,8 +472,6 @@
                          }
                          
                          }
-                         
-                         console.log("For " + path[i] + " " + source + " -> " + path[i-1] + " " + target);
                          
                          
                          links[i-1] = ({"source":source,"target":target});
