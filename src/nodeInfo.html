@@ -38,6 +38,22 @@
         padding-bottom: 10px;
         min-height: 2em;
     }
+    .link {
+        stroke: #000;
+        stroke-width: 1.5px;
+    }
+    
+    .node {
+        fill: #000;
+        stroke: #fff;
+        stroke-width: 1.5px;
+    }
+    
+    text {
+        font: 10px sans-serif;
+        pointer-events: none;
+        text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+    }
     </style>
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -107,6 +123,11 @@
               6 hours
             </label>
           </div>
+          <div id="node-diagram">
+              <br>
+              <label>Node Diagram</label>
+              <br>
+          </div>
         </div>
 
         </fieldset>
@@ -122,14 +143,18 @@
     <!-- /build -->
     <script src="static/moment.min.js"></script>
     <script src="static/dygraph-combined.js"></script>
+    <script src="d3.min.js"></script>
+    <script src="socket.io.min.js"></script>
     <script>
     var pageStarting=true;
     var graphObjs = [];
     var dataInterval = 48*3600; // 48 hours
+    var node_name;
 
     getNodeInfo();
     getNodePackets();
     getNodeGraphData();
+    diagrams();
     
     setInterval(function() {
         getNodePackets();
@@ -148,7 +173,7 @@
 	        };
 	    }
         $.ajax({
-	        url: "api/nodeInfo",
+	        url: "/api/nodeInfo",
 	        type: "GET",
 	        data: dataVar,
 	        dataType: 'json',
@@ -159,6 +184,7 @@
 	                if(data[0].owner!=null) output+='<p class="lead">'+data[0].owner.trim()+'</p>';
 	                $("#nodeinfo").html(output);
 	                document.title = data[0].name.trim()+" - UKHASnet";
+                    node_name = data[0].name.trim();
                     if(pageStarting) {
                         pageStarting=false;
                     }
@@ -187,7 +213,7 @@
 	        };
 	    }
         $.ajax({
-	        url: "api/nodePackets",
+	        url: "/api/nodePackets",
 	        type: "GET",
 	        data: dataVar,
 	        dataType: 'json',
@@ -227,7 +253,7 @@
 	        };
 	    }
         $.ajax({
-	        url: "api/nodeGraphData",
+	        url: "/api/nodeGraphData",
 	        type: "GET",
 	        data: dataVar,
 	        dataType: 'json',
@@ -277,7 +303,7 @@
 	        };
 	    }
         $.ajax({
-	        url: "api/nodeGraphData",
+	        url: "/api/nodeGraphData",
 	        type: "GET",
 	        data: dataVar,
 	        dataType: 'json',
@@ -339,6 +365,186 @@
     function datetime_str(rfc3339_string) {
         var date_obj = new Date(rfc3339_string)
         return date_obj.toLocaleDateString()+' '+date_obj.toLocaleTimeString()
+    }
+    
+    function diagrams(){
+        var Socket;
+        
+        var width = 480,
+        height = 240;
+        
+        var color = d3.scale.category10();
+        
+        var track_node = "XXX";
+        var dataVar;
+        if(urlParam('name')) {
+            dataVar = {
+                name: urlParam('name')
+            };
+        } else {
+            dataVar = {
+                id: urlParam('id')
+            };
+        }
+        $.ajax({
+               url: "/api/nodeInfo",
+               type: "GET",
+               data: dataVar,
+               dataType: 'json',
+               success: function( data ) {
+               if(typeof(data.length)!= 'undefined' && data.length!=0) {
+               track_node = data[0].name.trim();
+               
+               var gateway_node;
+               
+               console.log('Track Node: ' + track_node);
+               
+               //id: "AH6",
+               //group: 2 =gateway, 1 =repeater, 3 =source, 4 =balloon
+               var nodes = [{id: track_node, group:3}],
+               links = [];
+               
+               var force = d3.layout.force()
+               .nodes(nodes)
+               .links(links)
+               .charge(-400)
+               .linkDistance(120)
+               .size([width, height])
+               .on("tick", tick);
+               
+               var svg = d3.select("div#node-diagram").append("svg")
+               .attr("width", width)
+               .attr("height", height);
+               
+               var node = svg.selectAll(".node"),
+               link = svg.selectAll(".link"),
+               text = svg.selectAll("text");
+               
+               Socket = io("www.ukhas.net/logtail", {'force new connection': true });
+               Socket.on("upload_row", function(message){
+                         data=JSON.parse(message);
+                         var output="";
+                         
+                         output = data.p;
+                         console.log(output);
+                         
+                         //process the data, extract out the path
+                         var res = data.p.slice(0,-1).split("[");
+                         var path = res[1].split(",");
+                         //path contains all the node ids
+                         
+                         if (path[0] == track_node){
+                         
+                         console.log("Found " + track_node);
+                         gateway_node = data.nn;
+                         
+                         //add gateway node
+                         path.push(gateway_node);
+                         
+                         var dataLength = path.length;
+                         
+                         clear_links();
+                         
+                         //now we cycle through the path and add the nodes to the node array
+                         // we also use the path to work out the links between the nodes
+                         for (var i=1; i<dataLength; i++) {
+                         
+                         var result = check_node(path[i]);
+                         
+                         //set the group_type and therefore the colour of the node
+                         if(path[i] == track_node){
+                            group_type = 3;
+                         }
+                         else if(path[i] == gateway_node){
+                            group_type = 2;
+                         }
+                         else {
+                            group_type = 1;
+                         }
+                         
+                         if (result == 0){
+                         var node_to_push = {id: path[i], group: group_type};
+                         nodes.push(node_to_push);
+                         }
+                         
+                         //This is where we make the links
+                         var source, target;
+                         for(var k = 0; k < nodes.length; k++) {
+                         if(nodes[k].id === path[i]) {
+                         source = k;
+                         }
+                         if(nodes[k].id === path[i-1]) {
+                         target = k;
+                         }
+                         
+                         }
+                         
+                         console.log("For " + path[i] + " " + source + " -> " + path[i-1] + " " + target);
+                         
+                         
+                         links[i-1] = ({"source":source,"target":target});
+                         
+                         //update the diagram
+                         start();
+                         
+                         }
+                         }
+                         
+                         
+                         });
+
+               function clear_links(){
+               link_length = links.length;
+               links.splice(0,link_length - 1);
+               start();
+               }
+               
+               function start() {
+               link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
+               link.enter().insert("line", ".node").attr("class", "link");
+               link.exit().remove();
+               
+               node = node.data(force.nodes(), function(d) { return d.id;});
+               node.enter().append("circle").attr("class", function(d) { return "node " + d.id; }).attr("r", 8).call(force.drag).style("fill", function(d) { return color(d.group); });
+               node.exit().remove();
+               
+               text = text.data(force.nodes(), function(d) { return d.id;});
+               text.enter().append("text").attr("x", 12).attr("y", ".31em").text(function(d) { return d.id; });
+               text.exit().remove();
+               
+               force.start();
+               }
+               
+               function tick() {
+               node.attr("cx", function(d) { return d.x; })
+               .attr("cy", function(d) { return d.y; })
+               
+               link.attr("x1", function(d) { return d.source.x; })
+               .attr("y1", function(d) { return d.source.y; })
+               .attr("x2", function(d) { return d.target.x; })
+               .attr("y2", function(d) { return d.target.y; });
+               
+               text.attr("transform", transform);
+               }
+               
+               function transform(d) {
+               return "translate(" + d.x + "," + d.y + ")";
+               }
+               
+               function check_node(str) {
+               for (var j=0; j< (nodes.length); j++) {
+               if ( nodes[j].id == str){
+               return 1;
+               }
+               }
+               return 0;
+               }
+
+               }
+               }
+               });
+        //$("#node-diagram").html(" - Refreshing..");
+        
     }
     </script>
     <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-48058948-1', 'ukhas.net');ga('send', 'pageview');</script>
