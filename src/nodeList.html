@@ -101,7 +101,7 @@
 	        success: function( data ) {
 	            if(typeof(data.length)!= 'undefined' && data.length!=0) {
                         var output='<div class="input-group"><span class="input-group-addon">Filter</span><input id="filter" type="text" class="form-control" placeholder="Type here..."></div>';
-	                output+='<table class="table"><thead><tr><th class="col-md-3"><span>Nodename</span></th><th class="col-md-3"><span>Nodeinfo</span></th></tr></thead><tbody class="searchable">';
+	                output+='<table class="table"><thead><tr><th class="col-md-3"><span>ID</span></th><th class="col-md-3"><span>Description</span></th></tr></thead><tbody class="searchable">';
 	                var dataLength = data.length;
                     for (var i=0; i<dataLength; i++) {
                         output+='\n<tr id="'+data[i].id+'_row" class="browse_item tablerow">';
