@@ -48,44 +48,14 @@ module.exports = function(grunt) {
           mode: 'gzip',
           level: 9
         },
-        files: [
-            {
-              expand: true,
-              cwd: 'dist/',
-              src: ['*.html'],
-              dest: 'dist/',
-              ext: '.html.gz'
-            },
-            {
-              expand: true,
-              cwd: 'dist/',
-	      src: ['static/*.min.css'],
-              dest: 'dist/',
-              ext: '.min.css.gz'
-            },
-            {
-              expand: true,
-              cwd: 'dist/',
-              src: ['static/*.js'],
-              dest: 'dist/',
-              ext: '.js.gz'
-            },
-            {
-              expand: true,
-              cwd: 'dist/',
-              src: ['static/leaflet/leaflet.js'],
-              dest: 'dist/',
-              ext: '.js.gz'
-            },
-            {
-              expand: true,
-              cwd: 'dist/',
-              src: ['static/leaflet/leaflet.css'],
-              dest: 'dist/',
-              ext: '.css.gz'
-            }
-        ]
-      }
+        expand: true,
+        cwd: 'dist/',
+        src: ['**/*'],
+        dest: 'dist/',
+	rename: function(dest, src) {
+            return dest + src + '.gz';
+        }      
+     }
     }
   });
   // Load the plugins
