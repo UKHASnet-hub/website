@@ -105,12 +105,12 @@
 	                var dataLength = data.length;
                     for (var i=0; i<dataLength; i++) {
                         output+='\n<tr id="'+data[i].id+'_row" class="browse_item tablerow">';
-                        output+='<td ><b>'+data[i].name.trim()+'</b></td>';
+                        output+='<td ><b><a href="nodeInfo?id='+data[i].id+'" style="display:block">'+data[i].name.trim()+'</a></b></td>';
                         //output+='<div class="col-md-6">'+data[i].d+'</div>';
                         if(data[i].owner!=null) {
-                            output+='<td class="col-md-3">'+data[i].owner.trim()+'</td>';
+                            output+='<td class="col-md-3"><a href="nodeInfo?id='+data[i].id+'" style="display:block">'+data[i].owner.trim()+'</a></td>';
                         } else {
-                            output+='<td class="col-md-3"></td>';
+                            output+='<td class="col-md-3"><a href="nodeInfo?id='+data[i].id+'" style="display:block">&nbsp;</a></td>';
                         }
                         output+='</tr>';
                     }
