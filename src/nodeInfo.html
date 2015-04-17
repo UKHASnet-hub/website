@@ -391,6 +391,23 @@
                dataType: 'json',
                success: function( data ) {
                if(typeof(data.length)!= 'undefined' && data.length!=0) {
+               
+               function tick() {
+               node.attr("cx", function(d) { return d.x; })
+               .attr("cy", function(d) { return d.y; })
+               
+               link.attr("x1", function(d) { return d.source.x; })
+               .attr("y1", function(d) { return d.source.y; })
+               .attr("x2", function(d) { return d.target.x; })
+               .attr("y2", function(d) { return d.target.y; });
+               
+               text.attr("transform", transform);
+               }
+               
+               function transform(d) {
+               return "translate(" + d.x + "," + d.y + ")";
+               }
+               
                track_node = data[0].name.trim();
                
                var gateway_node;
@@ -505,22 +522,6 @@
                text.exit().remove();
                
                force.start();
-               }
-               
-               function tick() {
-               node.attr("cx", function(d) { return d.x; })
-               .attr("cy", function(d) { return d.y; })
-               
-               link.attr("x1", function(d) { return d.source.x; })
-               .attr("y1", function(d) { return d.source.y; })
-               .attr("x2", function(d) { return d.target.x; })
-               .attr("y2", function(d) { return d.target.y; });
-               
-               text.attr("transform", transform);
-               }
-               
-               function transform(d) {
-               return "translate(" + d.x + "," + d.y + ")";
                }
                
                function check_node(str) {
