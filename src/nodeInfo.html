@@ -338,8 +338,8 @@
                         popupAnchor: [0, -80]
                     });
                     // Map Marker
-                    var popupHtml = '<b>t:</b>'+datetime_str(data[0].t)+'<br>'
-                    popupHtml += '<b>Lat:</b> '+Math.round(data[0].lat*1000)/1000+' <b>Lon: </b> '+Math.round(data[0].lon*1000)/1000+' <b>Alt:</b> '+data[0].alt+'m';
+                    var popupHtml = '<b>Last Updated:</b> '+datetime_str(data[0].t)+'<br>'
+                    popupHtml += Math.round(data[0].lat*10000)/10000+', '+Math.round(data[0].lon*10000)/10000+' <b>Alt:</b> '+data[0].alt+'m';
                     mapMarker = L.marker([data[0].lat,data[0].lon], {
                         title: "Current Location",
                         icon: mapIcons["balloon-blue"]
@@ -379,8 +379,8 @@
 	            if(dataLength!=0) {
 	                map.panTo([data[0].lat, data[0].lon]);
 	                mapMarker.setLatLng([data[0].lat, data[0].lon]);
-	                var popupHtml = '<b>t:</b>'+datetime_str(data[0].t)+'<br>'
-                    popupHtml += '<b>Lat:</b> '+Math.round(data[0].lat*1000)/1000+' <b>Lon: </b> '+Math.round(data[0].lon*1000)/1000+' <b>Alt:</b> '+data[0].alt+'m';
+	                var popupHtml = '<b>Last Updated:</b> '+datetime_str(data[0].t)+'<br>'
+                    popupHtml += Math.round(data[0].lat*10000)/10000+', '+Math.round(data[0].lon*10000)/10000+' <b>Alt:</b> '+data[0].alt+'m';
                     mapMarker.setPopupContent(popupHtml);
                     var temp_latlngs = [];
                     for(var i=0;i<dataLength;i++) {
