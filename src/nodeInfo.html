@@ -32,9 +32,8 @@
         padding-bottom: 20px;
     }
     .node-map {
-    }
-    .node-map-active {
         height: 320px;
+        width: 100% !important;
     }
     .nodegraph {
         width: 100% !important;
@@ -141,7 +140,6 @@
         </div>
     </div>
     <div id="nodegraphs" class="col-md-7 node-graphs">
-    <div id="nodemap" class="node-map"></div>
     </div>
     </div><!-- /.container -->
     <!-- build:js static/jquerybootstrap.min.js -->
@@ -294,8 +292,24 @@
                     }
                 }
                 $("#graphload-status").html("");
+                getMapData();
 	        }
         });
+        $("#graphload-status").html(" - Loading..");
+    }
+    function getMapData() {
+        var dataVar;
+        if(urlParam('name')) {
+            dataVar = {
+	            name: urlParam('name'),
+	            period: dataInterval
+	        };
+	    } else {
+	        dataVar = {
+	            id: urlParam('id'),
+	            period: dataInterval
+	        };
+	    }
         dataVar['filterfix']='1';
         $.ajax({
 	        url: "/api/nodeLocations",
@@ -305,6 +319,7 @@
 	        success: function( data ) {
 	            dataLength = data.length;
 	            if(dataLength!=0) {
+	                $('#nodegraphs').append('<div id="nodemap" class="node-map"></div>');
 	                map = L.map('nodemap', {
                         center: [data[0].lat,data[0].lon],
                         zoom: 12
@@ -339,7 +354,6 @@
                 }
 	        }
         });
-        $("#graphload-status").html(" - Loading..");
     }
     
     function updateNodeGraphData() {
