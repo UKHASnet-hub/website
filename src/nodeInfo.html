@@ -30,6 +30,8 @@
         padding-top: 50px;
         padding-bottom: 20px;
     }
+    .node-map {
+    }
     .nodegraph {
         width: 100% !important;
     }
@@ -135,6 +137,7 @@
         </div>
     </div>
     <div id="nodegraphs" class="col-md-7 node-graphs">
+    <div id="nodemap" class="col-md-7 node-map">
     </div>
     </div><!-- /.container -->
     <!-- build:js static/jquerybootstrap.min.js -->
@@ -149,6 +152,10 @@
     var pageStarting=true;
     var graphObjs = [];
     var dataInterval = 48*3600; // 48 hours
+    var map;
+    var mapIcons = [];
+    var mapMarker;
+    var mapTail;
 
     getNodeInfo();
     getNodePackets();
@@ -282,6 +289,48 @@
                     }
                 }
                 $("#graphload-status").html("");
+	        }
+        });
+        dataVar['filterfix']='1';
+        $.ajax({
+	        url: "/api/nodeLocations",
+	        type: "GET",
+	        data: dataVar,
+	        dataType: 'json',
+	        success: function( data ) {
+	            dataLength = data.length;
+	            if(dataLength!=0) {
+	                map = L.map('map', {
+                        center: [data[0].lat,data[0].lon],
+                        zoom: 12
+                    });
+                    var osm = new L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                        minZoom: 2,
+                        maxZoom: 19
+                    });
+                    map.addLayer(osm);
+                    mapIcons["balloon-blue"] = L.icon({
+                        iconUrl: 'static/icons/balloon-blue.png',
+                        iconSize:     [46, 84], // size of the icon
+                        iconAnchor:   [23, 80],
+                        popupAnchor: [0, -80]
+                    });
+                    // Map Marker
+                    var popupHtml = '<b>t:</b>'+datetime_str(data[0].t)+'<br>'
+                    popupHtml += '<b>Lat:</b> '+Math.round(data[0].lat*1000)/1000+' <b>Lon: </b> '+Math.round(data[0].lon*1000)/1000+' <b>Alt:</b> '+data[0].alt+'m';
+                    mapMarker.bindPopup(popupHtml);
+                    mapMarker = L.marker([data[0].lat,data[0].lon], {
+                        title: "Current Location",
+                        icon: mapIcons["balloon-blue"]
+                    }).addTo(map);
+                    // Map Tail
+                    var temp_latlngs = [];
+                    for(var i=1;i<dataLength;i++) {
+                        temp_latlngs.push(new L.LatLng(data[i].lat, data[i].lon));
+                    }
+                    mapTail = L.polyline(temp_latlngs, {color: 'red', opacity: 1, weight: 3}).addTo(map);
+                }
 	        }
         });
         $("#graphload-status").html(" - Loading..");
