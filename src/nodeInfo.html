@@ -302,7 +302,7 @@
 	        success: function( data ) {
 	            dataLength = data.length;
 	            if(dataLength!=0) {
-	                map = L.map('map', {
+	                map = L.map('nodemap', {
                         center: [data[0].lat,data[0].lon],
                         zoom: 12
                     });
