@@ -377,8 +377,8 @@
 	        success: function( data ) {
 	            dataLength = data.length;
 	            if(dataLength!=0) {
-	                map.panTo([data[i].lat, data[i].lon]);
-	                mapMarker.setLatLng([data[i].lat, data[i].lon]);
+	                map.panTo([data[0].lat, data[0].lon]);
+	                mapMarker.setLatLng([data[0].lat, data[0].lon]);
 	                var popupHtml = '<b>t:</b>'+datetime_str(data[0].t)+'<br>'
                     popupHtml += '<b>Lat:</b> '+Math.round(data[0].lat*1000)/1000+' <b>Lon: </b> '+Math.round(data[0].lon*1000)/1000+' <b>Alt:</b> '+data[0].alt+'m';
                     mapMarker.setPopupContent(popupHtml);
