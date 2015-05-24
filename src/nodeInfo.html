@@ -34,6 +34,7 @@
     .node-map {
         height: 320px;
         width: 100% !important;
+        margin-left: 45px;
     }
     .nodegraph {
         width: 100% !important;
@@ -292,9 +293,9 @@
                     }
                 }
                 $("#graphload-status").html("");
-                getMapData();
 	        }
         });
+        getMapData();
         $("#graphload-status").html(" - Loading..");
     }
     function getMapData() {
@@ -319,7 +320,7 @@
 	        success: function( data ) {
 	            dataLength = data.length;
 	            if(dataLength!=0) {
-	                $('#nodegraphs').append('<div id="nodemap" class="node-map"></div>');
+	                $('#nodegraphs').prepend('<div id="nodemap" class="node-map"></div>');
 	                map = L.map('nodemap', {
                         center: [data[0].lat,data[0].lon],
                         zoom: 12
