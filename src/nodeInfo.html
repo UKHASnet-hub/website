@@ -321,11 +321,11 @@
                     // Map Marker
                     var popupHtml = '<b>t:</b>'+datetime_str(data[0].t)+'<br>'
                     popupHtml += '<b>Lat:</b> '+Math.round(data[0].lat*1000)/1000+' <b>Lon: </b> '+Math.round(data[0].lon*1000)/1000+' <b>Alt:</b> '+data[0].alt+'m';
-                    mapMarker.bindPopup(popupHtml);
                     mapMarker = L.marker([data[0].lat,data[0].lon], {
                         title: "Current Location",
                         icon: mapIcons["balloon-blue"]
                     }).addTo(map);
+                    mapMarker.bindPopup(popupHtml);
                     // Map Tail
                     var temp_latlngs = [];
                     for(var i=1;i<dataLength;i++) {
