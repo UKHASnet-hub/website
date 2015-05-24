@@ -33,6 +33,9 @@
     }
     .node-map {
     }
+    .node-map-active {
+        height: 320px;
+    }
     .nodegraph {
         width: 100% !important;
     }
@@ -138,7 +141,7 @@
         </div>
     </div>
     <div id="nodegraphs" class="col-md-7 node-graphs">
-    <div id="nodemap" class="col-md-7 node-map">
+    <div id="nodemap" class="node-map"></div>
     </div>
     </div><!-- /.container -->
     <!-- build:js static/jquerybootstrap.min.js -->
@@ -312,6 +315,7 @@
                         maxZoom: 19
                     });
                     map.addLayer(osm);
+                    $("#nodemap").addClass("node-map-active");
                     mapIcons["balloon-blue"] = L.icon({
                         iconUrl: 'static/icons/balloon-blue.png',
                         iconSize:     [46, 84], // size of the icon
