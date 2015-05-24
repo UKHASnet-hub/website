@@ -347,9 +347,47 @@
                     mapMarker.bindPopup(popupHtml);
                     // Map Tail
                     var temp_latlngs = [];
-                    for(var i=1;i<dataLength;i++) {
+                    for(var i=0;i<dataLength;i++) {
                         temp_latlngs.push(new L.LatLng(data[i].lat, data[i].lon));
                     }
+                    mapTail = L.polyline(temp_latlngs, {color: 'red', opacity: 1, weight: 3}).addTo(map);
+                }
+	        }
+        });
+    }
+    function updateMapData() {
+        var dataVar;
+        if(urlParam('name')) {
+            dataVar = {
+	            name: urlParam('name'),
+	            period: dataInterval
+	        };
+	    } else {
+	        dataVar = {
+	            id: urlParam('id'),
+	            period: dataInterval
+	        };
+	    }
+        dataVar['filterfix']='1';
+        $.ajax({
+	        url: "/api/nodeLocations",
+	        type: "GET",
+	        data: dataVar,
+	        dataType: 'json',
+	        success: function( data ) {
+	            dataLength = data.length;
+	            if(dataLength!=0) {
+	                map.panTo([data[i].lat, data[i].lon]);
+	                mapMarker.setLatLng([data[i].lat, data[i].lon]);
+	                var popupHtml = '<b>t:</b>'+datetime_str(data[0].t)+'<br>'
+                    popupHtml += '<b>Lat:</b> '+Math.round(data[0].lat*1000)/1000+' <b>Lon: </b> '+Math.round(data[0].lon*1000)/1000+' <b>Alt:</b> '+data[0].alt+'m';
+                    mapMarker.setPopupContent(popupHtml);
+                    var temp_latlngs = [];
+                    for(var i=0;i<dataLength;i++) {
+                        temp_latlngs.push(new L.LatLng(data[i].lat, data[i].lon));
+                    }
+                    map.removeLayer(mapTail);
+                    mapTail = null;
                     mapTail = L.polyline(temp_latlngs, {color: 'red', opacity: 1, weight: 3}).addTo(map);
                 }
 	        }
@@ -407,6 +445,9 @@
                 $("#graphload-status").html("");
 	        }
         });
+        if(map) {
+            updateMapData();
+        }
         $("#graphload-status").html(" - Refreshing..");
     }
     
