@@ -544,7 +544,7 @@
                link = svg.selectAll(".link"),
                text = svg.selectAll("text");
                
-               Socket = io("www.ukhas.net/logtail", {'force new connection': true });
+               Socket = io("ukhas.net/logtail", {'force new connection': true });
                Socket.on("upload_row", function(message){
                          data=JSON.parse(message);
                          var output="";
