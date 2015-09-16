@@ -4,11 +4,11 @@
   "description": "Website files for ukhas.net",
   "author": "UKHASnet",
   "license": "GPLv3",
-  "contributors": [ 
+  "contributors": [
     {
       "name": "Phil Crump",
       "email": "phildcrump@gmail.com"
-    } 
+    }
   ],
   "homepage": "https://github.com/UKHASnet-hub/website",
   "repository": {
@@ -22,7 +22,7 @@
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-copy": "^0.8.1",
-    "grunt-contrib-cssmin": "^0.13.0",
+    "grunt-contrib-cssmin": "^0.14.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-processhtml": "^0.3.8",
     "grunt-contrib-compress": "^0.13.0"
