@@ -485,7 +485,7 @@
                     for (var telem_field in telem) {
                         var field_data = telem[telem_field];
                         var graphId = (telem_type*10)+telem_field;
-                        var graphDataLength = currentGraphData.length;
+                        var graphDataLength = currentGraphData[graphId].length;
                         var newDataLength = field_data.data.length;
                         for (var k=0; k<newDataLength; k++) { // For each packet
                             currentGraphData[graphId][k+graphDataLength] = [];
