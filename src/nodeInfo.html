@@ -168,7 +168,7 @@
     
     setInterval(function() {
         getNodePackets();
-        updateNodeGraphData();
+        appendNodeGraphData();
     },10*1000); // Refresh Data every 10s
     
     function getNodeInfo() {
@@ -420,6 +420,62 @@
                         var field_data = telem[telem_field];
                         currentGraphData = [];
                         for (var k=0; k<field_data.data.length; k++) { // For each packet
+                            currentGraphData[k] = [];
+                            currentGraphData[k][0] = new Date(field_data.data[k].t)
+                            currentGraphData[k][1] = field_data.data[k].d;
+                        }
+                        if(graphObjs[(telem_type*10)+telem_field]) { 
+                            graphObjs[(telem_type*10)+telem_field].updateOptions({'file': currentGraphData});
+                        } else {
+                            var newDiv = $('<div></div>');   
+                            newDiv.attr('id', 'nodegraph-'+field_data.t+telem_field);
+                            newDiv.attr('class', 'nodegraph');
+                            $('#nodegraphs').append(newDiv);
+                            graphObjs[(telem_type*10)+telem_field] = new Dygraph(
+                                document.getElementById('nodegraph-'+field_data.t+telem_field),
+                                currentGraphData, {
+                                    title: field_data.tn,
+                                    //fillGraph: true,
+                                    labels: ['Time', field_data.t],
+                                    labelsDivWidth:275 // Legend width
+                                }
+                            );
+                        }
+                    }
+                }
+                $("#graphload-status").html("");
+	        }
+        });
+        if(map) {
+            updateMapData();
+        }
+        $("#graphload-status").html(" - Refreshing..");
+    }
+    
+    function appendNodeGraphData() {
+        var dataVar;
+        if(urlParam('name')) {
+            dataVar = {
+	            name: urlParam('name'),
+	            since: currentGraphData[currentGraphData.length-1][0].toISOString()
+	        };
+	    } else {
+	        dataVar = {
+	            id: urlParam('id'),
+	            since: currentGraphData[currentGraphData.length-1][0].toISOString()
+	        };
+	    }
+        $.ajax({
+	        url: "/api/nodeGraphData",
+	        type: "GET",
+	        data: dataVar,
+	        dataType: 'json',
+	        success: function( data ) {
+	            for (var telem_type in data) {
+                    var telem = data[telem_type];
+                    for (var telem_field in telem) {
+                        var field_data = telem[telem_field];
+                        for (var k=currentGraphData.length; k<(currentGraphData.length+field_data.data.length); k++) { // For each packet
                             currentGraphData[k] = [];
                             currentGraphData[k][0] = new Date(field_data.data[k].t)
                             currentGraphData[k][1] = field_data.data[k].d;
