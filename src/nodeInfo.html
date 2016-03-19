@@ -420,7 +420,8 @@
                     for (var telem_field in telem) {
                         var field_data = telem[telem_field];
                         currentGraphData = [];
-                        for (var k=0; k<field_data.data.length; k++) { // For each packet
+                        var newDataLength = field_data.data.length;
+                        for (var k=0; k<newDataLength; k++) { // For each packet
                             currentGraphData[k] = [];
                             currentGraphData[k][0] = new Date(field_data.data[k].t)
                             currentGraphData[k][1] = field_data.data[k].d;
@@ -476,10 +477,12 @@
                     var telem = data[telem_type];
                     for (var telem_field in telem) {
                         var field_data = telem[telem_field];
-                        for (var k=currentGraphData.length; k<(currentGraphData.length+field_data.data.length); k++) { // For each packet
-                            currentGraphData[k] = [];
-                            currentGraphData[k][0] = new Date(field_data.data[k].t)
-                            currentGraphData[k][1] = field_data.data[k].d;
+                        var graphDataLength = currentGraphData.length;
+                        var newDataLength = field_data.data.length;
+                        for (var k=0; k<newDataLength; k++) { // For each packet
+                            currentGraphData[k+graphDataLength] = [];
+                            currentGraphData[k+graphDataLength][0] = new Date(field_data.data[k].t)
+                            currentGraphData[k+graphDataLength][1] = field_data.data[k].d;
                         }
                         if(graphObjs[(telem_type*10)+telem_field]) { 
                             graphObjs[(telem_type*10)+telem_field].updateOptions({'file': currentGraphData});
