@@ -155,7 +155,7 @@
     <script>
     var pageStarting=true;
     var graphObjs = [];
-    var currentGraphData;
+    var currentGraphData = [];
     var dataInterval = 48*3600; // 48 hours
     var map;
     var mapIcons = [];
@@ -274,19 +274,20 @@
                     var telem = data[telem_type];
                     for (var telem_field in telem) {
                         var field_data = telem[telem_field];
-                        currentGraphData = [];
+                        var graphId = (telem_type*10)+telem_field;
                         var newDiv = $('<div></div>');   
                         newDiv.attr('id', 'nodegraph-'+field_data.t+telem_field);
                         newDiv.attr('class', 'nodegraph');
-                        $('#nodegraphs').append(newDiv); 
+                        $('#nodegraphs').append(newDiv);
+                        currentGraphData[graphId] = [];
                         for (var k=0; k<field_data.data.length; k++) { // For each packet
-                            currentGraphData[k] = [];
-                            currentGraphData[k][0] = new Date(field_data.data[k].t)
-                            currentGraphData[k][1] = field_data.data[k].d;
+                            currentGraphData[graphId][k] = [];
+                            currentGraphData[graphId][k][0] = new Date(field_data.data[k].t)
+                            currentGraphData[graphId][k][1] = field_data.data[k].d;
                         }
-                        graphObjs[(telem_type*10)+telem_field] = new Dygraph(
+                        graphObjs[graphId] = new Dygraph(
                             document.getElementById('nodegraph-'+field_data.t+telem_field),
-                            currentGraphData, {
+                            currentGraphData[graphId], {
                                 title: field_data.tn,
                                 //fillGraph: true,
                                 labels: ['Time', field_data.t],
@@ -422,23 +423,24 @@
                     var telem = data[telem_type];
                     for (var telem_field in telem) {
                         var field_data = telem[telem_field];
-                        currentGraphData = [];
+                        var graphId = (telem_type*10)+telem_field;
+                        currentGraphData[graphId] = [];
                         var newDataLength = field_data.data.length;
                         for (var k=0; k<newDataLength; k++) { // For each packet
-                            currentGraphData[k] = [];
-                            currentGraphData[k][0] = new Date(field_data.data[k].t)
-                            currentGraphData[k][1] = field_data.data[k].d;
+                            currentGraphData[graphId][k] = [];
+                            currentGraphData[graphId][k][0] = new Date(field_data.data[k].t)
+                            currentGraphData[graphId][k][1] = field_data.data[k].d;
                         }
-                        if(graphObjs[(telem_type*10)+telem_field]) { 
-                            graphObjs[(telem_type*10)+telem_field].updateOptions({'file': currentGraphData});
+                        if(graphObjs[graphId]) { 
+                            graphObjs[graphId].updateOptions({'file': currentGraphData[graphId]});
                         } else {
                             var newDiv = $('<div></div>');   
                             newDiv.attr('id', 'nodegraph-'+field_data.t+telem_field);
                             newDiv.attr('class', 'nodegraph');
                             $('#nodegraphs').append(newDiv);
-                            graphObjs[(telem_type*10)+telem_field] = new Dygraph(
+                            graphObjs[graphId] = new Dygraph(
                                 document.getElementById('nodegraph-'+field_data.t+telem_field),
-                                currentGraphData, {
+                                currentGraphData[graphId], {
                                     title: field_data.tn,
                                     //fillGraph: true,
                                     labels: ['Time', field_data.t],
@@ -480,23 +482,24 @@
                     var telem = data[telem_type];
                     for (var telem_field in telem) {
                         var field_data = telem[telem_field];
+                        var graphId = (telem_type*10)+telem_field;
                         var graphDataLength = currentGraphData.length;
                         var newDataLength = field_data.data.length;
                         for (var k=0; k<newDataLength; k++) { // For each packet
-                            currentGraphData[k+graphDataLength] = [];
-                            currentGraphData[k+graphDataLength][0] = new Date(field_data.data[k].t)
-                            currentGraphData[k+graphDataLength][1] = field_data.data[k].d;
+                            currentGraphData[graphId][k+graphDataLength] = [];
+                            currentGraphData[graphId][k+graphDataLength][0] = new Date(field_data.data[k].t)
+                            currentGraphData[graphId][k+graphDataLength][1] = field_data.data[k].d;
                         }
-                        if(graphObjs[(telem_type*10)+telem_field]) { 
-                            graphObjs[(telem_type*10)+telem_field].updateOptions({'file': currentGraphData});
+                        if(graphObjs[graphId]) { 
+                            graphObjs[graphId].updateOptions({'file': currentGraphData[graphId]});
                         } else {
                             var newDiv = $('<div></div>');   
                             newDiv.attr('id', 'nodegraph-'+field_data.t+telem_field);
                             newDiv.attr('class', 'nodegraph');
                             $('#nodegraphs').append(newDiv);
-                            graphObjs[(telem_type*10)+telem_field] = new Dygraph(
+                            graphObjs[graphId] = new Dygraph(
                                 document.getElementById('nodegraph-'+field_data.t+telem_field),
-                                currentGraphData, {
+                                currentGraphData[graphId], {
                                     title: field_data.tn,
                                     //fillGraph: true,
                                     labels: ['Time', field_data.t],
