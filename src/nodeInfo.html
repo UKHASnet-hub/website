@@ -167,10 +167,12 @@
     getNodeGraphData();
     getNodeDiagrams();
     
-    setInterval(function() {
+    
+    var updateTimer = 10;
+    function updateAllData() {
         getNodePackets();
         appendNodeGraphData();
-    },10*1000); // Refresh Data every 10s
+    }
     
     function getNodeInfo() {
         var dataVar;
@@ -294,6 +296,7 @@
                     }
                 }
                 $("#graphload-status").html("");
+                setInterval(updateAllData,updateTimer*1000);
 	        }
         });
         getMapData();
