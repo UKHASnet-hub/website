@@ -156,6 +156,7 @@
     var pageStarting=true;
     var graphObjs = [];
     var currentGraphData = [];
+    var latestTimestamp;
     var dataInterval = 48*3600; // 48 hours
     var map;
     var mapIcons = [];
@@ -230,6 +231,7 @@
 	        data: dataVar,
 	        dataType: 'json',
 	        success: function( data ) {
+	            latestTimestamp = data.lPackets[0].t;
                 var output="";
                 output+='<h3>Last Active:&nbsp;'+moment(data.lPackets[0].t).fromNow()+'</h3>';
                 output+='<b>Last Packet:</b>&nbsp;'+data.lPackets[0].p+'<br>';
@@ -464,12 +466,12 @@
         if(urlParam('name')) {
             dataVar = {
 	            name: urlParam('name'),
-	            since: currentGraphData[currentGraphData.length-1][0].toISOString()
+	            since: latestTimestamp
 	        };
 	    } else {
 	        dataVar = {
 	            id: urlParam('id'),
-	            since: currentGraphData[currentGraphData.length-1][0].toISOString()
+	            since: latestTimestamp
 	        };
 	    }
         $.ajax({
