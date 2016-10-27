@@ -78,7 +78,7 @@
       <div class="logtail">
         <h1>Message Logtail</h1>
         <p class="lead">This page will automatically update with new messages from the network. <a id="feed-toggle">Pause</a></p>
-		<div class="input-group"><span class="input-group-addon">Filter</span><input id="filter" type="text" class="form-control" placeholder="Type here..." autofocus></div>
+        <div class="input-group"><span class="input-group-addon">Filter</span><input id="filter" type="text" class="form-control" placeholder="Type here..." autofocus></div>
         <div class="row title">
             <div class="col-md-3">Upload id, Timestamp</div>
             <div class="col-md-5">Raw Packet</div>
@@ -93,6 +93,7 @@
     </div><!-- /.container -->
     <!-- build:js static/jquerybootstrap.min.js -->
     <script src="static/jquery/jquery-1.11.3.min.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
     <!-- /build -->
     <script src="static/socket.io.min.js"></script>
     <script>
@@ -123,9 +124,9 @@
             } else {
                 $("#logtail-inner").html("<p><b>Nothing Found!</b></p>");
             }
-			
-			filter();
-		});
+            
+            filter();
+        });
         
         Socket.on("upload_row", function(message){
             var output="";
@@ -147,9 +148,9 @@
                 row_fifo.shift()
             }
             $("#logtail-inner").prepend(output);
-
-			filter();
-		});
+            
+            filter();
+        });
         
         Socket.on("upload_parse", function(message){
             data=JSON.parse(message);
@@ -178,22 +179,22 @@
         var date_obj = new Date(rfc3339_string)
         return date_obj.toLocaleDateString()+' '+date_obj.toLocaleTimeString()
     }
-	
-	function escapeRegExp(str) {
-		return str.replace(/[-[\]{}()*+?.\\^$|]/g, "\\$&");
-	}
-	
-	function filter() {
-		filt = escapeRegExp($('#filter').val());
-		var rex = new RegExp(filt, 'i');
-		$('.row').hide();
-		$('.row').filter(function () {
-			return rex.test($(this).text());
-		}).show();
-	}
-	
-	$('#filter').keyup(filter);
-	  
+    
+    function escapeRegExp(str) {
+        return str.replace(/[-[\]{}()*+?.\\^$|]/g, "\\$&");
+    }
+    
+    function filter() {
+        filt = escapeRegExp($('#filter').val());
+        var rex = new RegExp(filt, 'i');
+        $('.row').hide();
+        $('.row').filter(function () {
+            return rex.test($(this).text());
+        }).show();
+    }
+    
+    $('#filter').keyup(filter);
+    
     </script>
     <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-48058948-1', 'ukhas.net');ga('send', 'pageview');</script>
   </body>
