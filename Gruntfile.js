@@ -50,7 +50,7 @@ module.exports = function(grunt) {
         },
         expand: true,
         cwd: 'dist/',
-        src: ['**/*'],
+        src: ['**/*.html','**/*.css','**/*.js'],
         dest: 'dist/',
 	rename: function(dest, src) {
             return dest + src + '.gz';
