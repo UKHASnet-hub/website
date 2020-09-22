@@ -231,19 +231,26 @@
 	        data: dataVar,
 	        dataType: 'json',
 	        success: function( data ) {
-	            latestTimestamp = data.lPackets[0].t;
                 var output="";
-                output+='<h3>Last Active:&nbsp;'+moment(data.lPackets[0].t).fromNow()+'</h3>';
-                output+='<b>Last Packet:</b>&nbsp;'+data.lPackets[0].p+'<br>';
-                output+='<b>Received At:</b>&nbsp;'+datetime_str(data.lPackets[0].t)+'<br><br>';
-                output+='<b>Last 5 Packets:</b>';
-                //output+='<table><tbody>';
-                for (var j=0; j<data.lPackets.length; j++) {
-                    output+='<div class="row">';
-                    output+='<div class="col-md-6">'+datetime_str(data.lPackets[j].t)+'</div>';
-                    output+='<div class="col-md-6">'+data.lPackets[j].p+'</div>';
-                    output+='</div>';
-                }
+		if(data.lPackets.length > 0)
+		{
+	        	latestTimestamp = data.lPackets[0].t;
+                	output+='<h3>Last Active:&nbsp;'+moment(data.lPackets[0].t).fromNow()+'</h3>';
+                	output+='<b>Last Packet:</b>&nbsp;'+data.lPackets[0].p+'<br>';
+                	output+='<b>Received At:</b>&nbsp;'+datetime_str(data.lPackets[0].t)+'<br><br>';
+                	output+='<b>Last 5 Packets (within last month):</b>';
+                	//output+='<table><tbody>';
+                	for (var j=0; j<data.lPackets.length; j++) {
+                	    output+='<div class="row">';
+                	    output+='<div class="col-md-6">'+datetime_str(data.lPackets[j].t)+'</div>';
+                	    output+='<div class="col-md-6">'+data.lPackets[j].p+'</div>';
+                	    output+='</div>';
+                	}
+		}
+		else
+		{
+			output+='<i>No data within last month.</i>';
+		}
                 //output+='</tbody></table>';
                 if(data.lBoot!=0) { // Passed as 0 if server couldn't find a bootup packet
                     output+='<br><b>Last Booted At:</b>&nbsp;'+datetime_str(data.lBoot)+'&nbsp;('+moment(data.lBoot).fromNow()+')<br>';
