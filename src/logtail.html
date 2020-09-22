@@ -143,7 +143,7 @@
             output+='<div id="'+data.i+'_state" class="col-md-2">'+data.s+'</div>';
             output+='</div>';
             row_fifo.push(data.i)
-            if(row_fifo.length>50) {
+            while(row_fifo.length>50) {
                 $("#"+row_fifo[0]+"_row").remove()
                 row_fifo.shift()
             }
